@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<head>
+    <link rel="stylesheet" href="form/form-style.css">
+</head>
+<body>
+<!--
+There are probably many improvements that could be made,
+but it's a start on the frontend at least.
+-->
+    <div class="form-container">
+        <div class="row input-container">
+            <div class="col-12">
+                <div class="styled-input wide">
+                    <input type="text" id="name" name="name" required />
+                    <label>Name</label>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="styled-input">
+                    <input type="text" id="phone" name="phone" required />
+                    <label>Phone Number</label>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="styled-input">
+                    <input type="text" id="email" name="email" required />
+                    <label>Email</label>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <!--<form method="post" enctype="multipart/form-data">-->
+                <input class="col-8 left-input" type="file" name="fileToUpload" id="fileToUpload" value="" required style="float: left;"/>
+                <input class="col-4 right-input" id="upload" type="button" value="Upload Image" style="padding: 18px;"><span id="upload-msg"></span>
+                <!--</form>-->
+            </div>
+            <div class="col-12">
+                <div class="col-4" style="float: left; margin: 10px;">
+                    <img id="upload-result" src="" width="50px">
+                </div>
+                <div class="col-6" style="float: right; padding: 6px; margin: 0; display: block;"  >
+                    <div id="insert-students" class="btn-outline-success submit-btn">Update student</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -60,11 +60,11 @@ $(document).ready(function() {
                 headline = fLetterUpperCase(headline);
                 $('.info-container').text('Add to '+headline);
                 showCancel();
-
             })
         }, 300);
 
     })
+
 
     //return to school view
     $('.school').click(function () {
@@ -79,6 +79,7 @@ $(document).ready(function() {
             var cont = $('.students').parent().parent();
             if($('.users').length === 0 ) {
                 var userBox = cont.find('.students').parent().clone();
+
                 userBox.find('label').attr('class', 'users-container');
                 userBox.find('label').text('Users');
                 userBox.css('position','absolute');
@@ -117,12 +118,7 @@ $(document).ready(function() {
         $('#navbar').toggleClass('blur');
         $('.container').toggleClass('blur');
     })
-    // $('#popup-layover').click(function () {
-    //     $('#popup-layover').fadeOut()
-    //     $('#navbar').toggleClass('blur');
-    //     $('.container').toggleClass('blur');
-    // })
-    //canvas draw
+
     var c = document.getElementById("close-Canvas");
     var ctx = c.getContext("2d");
     ctx.fillStyle = "#D77400";
@@ -205,6 +201,7 @@ $(document).ready(function() {
                 $('.course-description-info').text(description);
                 deleteItem();
                 showCancel();
+                loadUpdateFormEvent()
             });
         });
     }, 500)
@@ -231,7 +228,7 @@ $(document).ready(function() {
 
     }       // load student info
     function deleteItem() {
-        $('.info-btn').click(function () {
+        $('.course-delete').click(function () {
             var name = $(this).closest('.info-con').find('h2').text();
             var table = $(this).attr('class').replace("-delete info-btn","s");
             $.post('actions/delete.php',{ table: table, name: name } , function (data) {
@@ -373,4 +370,24 @@ $(document).ready(function() {
             $('.info').html(counters);
         });
     }              // load counters
+    function loadUpdateFormEvent() {
+        $('.edit-btn').on('click',function () {
+            var headline = $(this).parent().attr('class').replace('-edit info-btn','s');
+            if (headline === 'courses') {
+                $('.info').load('/jhonb/theschool/form/update-courses.html');
+            } else {
+                $('.info').load('/jhonb/theschool/form/update-students.html');
+            }
+            setTimeout(function(){
+                $('.form-container').ready(function () {
+                    fileUpload();
+                    headline = fLetterUpperCase(headline);
+                    $('.info-container').text('Update '+headline);
+                    showCancel();
+
+                })
+            }, 300);
+
+        })
+    }
 });

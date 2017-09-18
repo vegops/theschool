@@ -6,6 +6,7 @@
 }
 span.info-btn img {
     width: 20px;
+    cursor: pointer;
 }
 div.course-img-info span {
     float: right;
