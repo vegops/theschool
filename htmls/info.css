@@ -1,0 +1,18 @@
+.info-con {
+    text-align: left;
+}
+.course-img-info span {
+    border-radius: 0px;
+}
+span.info-btn img {
+    width: 20px;
+}
+div.course-img-info span {
+    float: right;
+    margin-right: 10px;
+}
+.student-img-info img.student-img {
+    border-radius: 0;
+    transform: scale(1.9);
+    border: 2px solid #D77400;
+}

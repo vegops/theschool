@@ -1,0 +1,294 @@
+body {
+    font-family: 'Paytone One', sans-serif;
+    background: url('images/notebook-background.jpg') #fff;
+    overflow-y: scroll;
+}
+.search-bar {
+    font-family: 'Paytone One', sans-serif;
+}
+a.nav-link {
+    margin-top: 6px;
+}
+.navbar {
+    background-color: rgba(255,255,255,0);
+}
+nav a {
+    transition: 300ms ease;
+    color: #D77400;
+}
+nav a:hover, .user-out:hover {
+    text-shadow: 0px 0px 25px #D77400 ;
+    color: #562E00;
+    transform: scale(1.1);
+    cursor: pointer;
+}
+div#popup-layover {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: none;
+}
+div#user-popup {
+    background: url(http://thepatternlibrary.com/img/h.jpg) black;
+    border: 10px groove #D77400;
+    border-right-style: ridge;
+    border-bottom-style: ridge;
+    position: absolute;
+    left: 20%;
+    right: 20%;
+    top: 20%;
+    bottom: 20%;
+    border-radius: 10px;
+    text-align: left;
+    color: #cccccc;
+    max-height: 220px;
+    max-width: 800px;
+    animation-name: glow;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+}
+#user-popup canvas {
+    position: absolute;
+    right: 0;
+    background: url(http://thepatternlibrary.com/img/h.jpg) black;
+}
+#close-Canvas{
+    top: 0;
+}
+#edit-Canvas{
+    bottom: 0;
+}
+#pop-icon i {
+    padding: 30px;
+}
+.user-details {
+    padding: 30px;
+}
+#user-popup .close, #user-popup .edit {
+    position: absolute;
+    right: 0;
+    transition: 400ms ease;
+    cursor: pointer;
+    z-index: 2;
+    font-size: 35px;
+}
+#user-popup .edit {
+    bottom: 0;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    opacity: .5;
+}
+#user-popup .close:hover, #user-popup .edit:hover {
+    transform: scale(1.1);
+    color: yellow;
+    opacity: 1;
+}
+
+
+.btn-outline-success {
+    color: #D77400;
+    background-image: none;
+    background-color: transparent;
+    border-color: #D77400;
+}
+.btn-outline-success:hover {
+    color: #fff;
+    background-color: #D77400;
+    border-color: #D77400;
+}
+.btn-outline-success:active {
+    color: #fff;
+    background-color: #D77400;
+    border-color: #D77400;
+    transform: scale(0.9);
+}
+.btn-outline-success:focus {
+    -webkit-box-shadow: 0 0 0 2px #D77400;
+    box-shadow: 0 0 0 2px #D77400;
+}
+.form-control:focus {
+    color: #464a4c;
+    background-color: #fff;
+    border-color: #D77400;
+    outline: 0;
+}
+.user-info {
+    margin: 13px;
+    display: inline-block;
+}
+.container {
+    margin: 20px auto;
+    padding: 20px;
+    background: url(http://thepatternlibrary.com/img/h.jpg) aliceblue;
+    color: #cccccc;
+    border-radius: 3px;
+    min-height: 400px;
+    box-shadow: 0 0 20px 3px #ccc;
+    border: 10px groove #D77400;
+    text-align: center;
+    transition: 300ms ease;
+}
+.inner-container .column {
+    display: inline-block;
+    white-space: nowrap;
+    margin:0;
+}
+.inner-container .data {
+    float: right;
+}
+div.info-outer {
+    position: absolute;
+    right: 0;
+}
+
+/*list styling*/
+ul.list {
+    border: 2px dashed rgba(255,255,255,0.3);
+    min-height: 300px;
+    padding: 0;
+    list-style: none;
+    transition: 2s ease;
+}
+.list li {
+    margin: 20px 10px;
+    cursor: pointer;
+    padding: 10px 0;
+    height: 70px;
+    background: url('images/wooden-background.jpg') center #804800;
+    border-radius: 4px 55px 55px 4px;
+    transition: 400ms ease;
+}
+.list li:hover {
+    box-shadow: 0 0 25px 1px yellow;
+    transform: scale(1.03);
+    color: #804800;
+    background: url('images/light-wood.jpg') #F4A460;
+}
+@keyframes glow {
+    0% {box-shadow: 0 0 2px 1px yellow;}
+    50% {box-shadow: 0 0 15px 3px yellow;}
+    100% {box-shadow: 0 0 2px 1px yellow;}
+
+}
+li.selected {
+    color: #804800;
+    background: url('images/light-wood.jpg') #F4A460;
+    box-shadow: 0 0 2px 1px yellow;
+    animation-name: glow;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+}
+
+li.course:first-child {
+    margin-top: 20px;
+}
+.course-name, .student-name, .users-name, .users-role {
+    float: left;
+    text-align: left;
+    font-size: 0.8em;
+}
+span.course-img {
+    padding: 25px 40px;
+    background-position: center;
+    background-size: cover;
+    border-radius: 50%;
+    border: 2px solid #d77400;
+    position: relative;
+    left: 18px;
+    top: 9px;
+}
+img.student-img, img.users-img {
+    height: 52px;
+    float: right;
+    border-radius: 50%;
+    width: 52px;
+    /* border: 20px solid; */
+    padding: 0;
+    margin-right: 10px;
+}
+p.course-description {
+    margin-top: 30px;
+    display: none;
+    padding: 5px;
+    text-align: left;
+    font-size: 0.8em;
+    background-color: white;
+    color: #000;
+    border-radius: 4px;
+    z-index: 3;
+}
+div.student-description, div.users-description {
+    text-align: left;
+    font-size: 0.5em;
+}
+div.student-description .student-phone, div.users-description .users-phone {
+    display: block;
+}
+div.student-description .student-phone:before, div.users-description .users-phone:before {
+    content: "Phone: ";
+}
+div.student-description .student-email, div.users-description .users-email {
+    display: block;
+}
+div.student-description .student-email:before, div.users-description .users-email:before  {
+    content: "Email: ";
+}
+.add-btn {
+    margin: auto 10px;
+    transition: 300ms ease;
+    padding: 2px 8px 4px 8px;
+}
+.add-btn:hover {
+    background-color: #cccccc;
+    color: #000;
+    padding: 2px 8px 4px 8px;
+    border-radius: 2px;
+}
+/*==========================================================
+               counter section style
+============================================================*/
+
+.counter.col_fourth.col-6 {
+    display: inline-block;
+    float: left;
+    margin: 50px auto;
+}
+i.fa {
+    font-size: 50px;
+    margin: 10px;
+}
+.hider {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255,255,0,0.3);
+}
+.container div div .info {
+    padding: 20px;
+}
+.brown-border {
+    border: 10px groove #D77400;
+    position: fixed;
+    background: url(http://thepatternlibrary.com/img/h.jpg) black;
+    right: 20px;
+    left: 20px;
+}
+.fa-times-circle {
+    transition: 300ms ease;
+    cursor: pointer;
+}
+.fa-times-circle:hover {
+    color: red;
+    transform: scale(1.2);
+}
+.blur {
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(5px);
+    -o-filter: blur(5px);
+    -ms-filter: blur(5px);
+    filter: blur(5px);
+}

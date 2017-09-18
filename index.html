@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The School</title>
+    <link rel="icon" href="https://cdn2.iconfinder.com/data/icons/school-pack-2/512/1-512.png" type="image/gif" sizes="16x16">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Paytone+One" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $.get('user.php', function (userData) {
+            if (userData === 'no user') {
+                window.location.replace("login/login.html");
+            }});
+    </script>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body style="display: none;">
+    <nav id="navbar" class="navbar navbar-toggleable-md navbar-light bg-faded">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand school" href="#"><img src="https://www.staffordschools.net/cms/lib/VA01818723/Centricity/Template/17/logo/district-logo.png" alt="School logo" width="50px"></a>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link school" href="#">&#9656; School <span class="sr-only">(current)</span></a>
+                </li>
+
+            </ul>
+            <div class="user">
+                <div class="user-info nav-item">
+                    <a class="user-name"><?php echo $user['name'];?></a>
+                </div>
+                <div class="user-info nav-item">
+                    <span class="user-role">role</span>
+                </div>
+                <div class="user-info nav-item">
+                    <img class="user-img" width="30px">
+                </div>
+
+            </div>
+            <span class="navbar-text">
+              <form class="form-inline">
+                <input class="search-bar search-input form-control mr-sm-2" type="text" placeholder="Search">
+                <button class="search-bar search-button btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+              </form>
+            </span>
+            <div class="user-info nav-item">
+                <a href="logout.php" class="user-out">Log Out</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5 col-lg-3">
+                <label class="courses-container"></label><span class="add-btn">&#43;</span>
+                <ul class="courses list">
+                </ul>
+            </div>
+            <div class="col-md-5 col-lg-3">
+                <label class="students-container"></label><span class="add-btn">&#43;</span>
+                <ul class="students list">
+                </ul>
+            </div>
+            <div class="col-md-12 col-lg-6 info-outer">
+                <label class="info-container">info</label>
+                <i id="cancel" class="" aria-hidden="true" style="font-size: 16px;"></i>
+                <div id="info-box" class="info"></div>
+            </div>
+        </div>
+    </div>
+    <div id="popup-layover">
+        <div class="row" id="user-popup">
+            <canvas id="close-Canvas" width="100" height="100"></canvas>
+            <span id="close-popup" class="close"><i class="fa fa-times" aria-hidden="true"></i></span>
+            <canvas id="edit-Canvas" width="100" height="100"></canvas>
+            <span id="edit-popup" class="edit"><i class="fa fa-pencil" aria-hidden="true"></i></span>
+            <div class="user-details col-6">
+                <h2 id="pop-user-name"></h2>
+                <div>
+                    <label>Role: &nbsp</label>
+                    <span id="pop-user-role"></span>
+                </div>
+                <div>
+                    <label>Phone: &nbsp</label>
+                    <span id="pop-user-phone"></span>
+                </div>
+                <div>
+                    <label>E-mail: &nbsp</label>
+                    <span id="pop-user-email"></span>
+                </div>
+
+            </div>
+            <div class="col-6">
+                <img id="pop-user-img" width="200px" height="200px" src="">
+                <span id="pop-icon"></span>
+            </div>
+
+        </div>
+    </div>
+
+
+
+</body>
+<script src="javascript.js" type="application/javascript"></script>
+</html>
