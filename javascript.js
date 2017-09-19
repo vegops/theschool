@@ -195,6 +195,7 @@ $(document).ready(function() {
             var imgObject = $(this).find('.course-img').clone();
             var description = $(this).find('p').text();
             $('.info').load('/jhonb/theschool/htmls/course-info.html', function () {
+                $(this).closest('.info-outer').find('.info-container').text('Course info');
                 $('.course-name-info').text(courseName);
                 // imgObject.css('border-radius','0');
                 $('.course-img-info').append(imgObject);
@@ -214,14 +215,22 @@ $(document).ready(function() {
                 $(this).addClass('selected');
                 var courseName = $(this).find('.student-name').text();
                 var imgObject = $(this).find('.student-img').clone();
-                var description = $(this).find('p').text();
+                imgObject.attr('style','position: absolute;');
+                var phone = $(this).find('.student-phone').clone();
+                phone.attr('class',"student-phone student-phone-info offset-3 col-6");
+                phone.attr('style',"font-size: 14px;");
+                var email = $(this).find('.student-email').clone()
+                email.attr('class',"student-email student-email-info offset-3 col-6");
+                email.attr('style',"font-size: 14px;");
                 $('.info').load('/jhonb/theschool/htmls/students-info.html', function () {
+                    $(this).closest('.info-outer').find('.info-container').text('Student info');
                     $('.student-name-info').text(courseName);
-                    // imgObject.css('border-radius','0');
                     $('.student-img-info').append(imgObject);
-                    $('.student-description-info').text(description);
+                    $('.student-description-info').append(phone);
+                    $('.student-description-info').append(email);
                     deleteItem();
                     showCancel();
+                    loadUpdateFormEvent()
                 });
             });
         }, 500)
@@ -372,19 +381,36 @@ $(document).ready(function() {
     }              // load counters
     function loadUpdateFormEvent() {
         $('.edit-btn').on('click',function () {
-            var headline = $(this).parent().attr('class').replace('-edit info-btn','s');
+            var headline = $(this).attr('class').replace('-edit info-btn edit-btn','s');
             if (headline === 'courses') {
                 $('.info').load('/jhonb/theschool/form/update-courses.html');
+                var name = $('.course-name-info').text();
+                var description = $('.course-description-info').text();
+                var img = $('.course-img').attr('style');
+                var indx1 = img.indexOf("(")+2;
+                var indx2 = img.indexOf(")")-1;
+                var src = img.substring(indx1,indx2);
             } else {
                 $('.info').load('/jhonb/theschool/form/update-students.html');
+                var name = $('.student-name-info').text();
+                var phone = $('.student-phone-info').text();
+                var email = $('.student-email-info').text();
+                var src = $('.student-img-info').find('img').attr('src');
             }
+
+
             setTimeout(function(){
                 $('.form-container').ready(function () {
                     fileUpload();
                     headline = fLetterUpperCase(headline);
                     $('.info-container').text('Update '+headline);
                     showCancel();
+                    $('#name').val(name);
+                    $('#phone').val(phone);
+                    $('#email').val(email);
 
+                    $('#description').val(description);
+                    $('#upload-result').attr('src',src);
                 })
             }, 300);
 
