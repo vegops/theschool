@@ -74,7 +74,7 @@ class Actions extends SchoolDb
     }
 
     protected function GetAssigned($ID) {
-        $sql = "SELECT `ID`, `name` FROM `course_of_student` WHERE `student_ID`='$ID';";
+        $sql = "SELECT `ID`, `name`, `description` FROM `course_of_student` WHERE `student_ID`='$ID';";
         $this->connect()->query('SET CHARACTER SET utf8');
         $result = $this->connect()->query($sql);
         if($result->num_rows > 0) {

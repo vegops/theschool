@@ -422,17 +422,40 @@ $(document).ready(function() {
         })
     }
     function getCheckbox() {
-        $.get('checkbox', function (checkbox) {
-            $('.students-course-list').html(checkbox);
-            $('label').click(function () {
-                $(this).parent('li').toggleClass('active');
+        $.get('lists', function (list) {
+            $('.students-course-list').html(list);
+            var courses;
+            var ID = "5001";
+            $.post('actions/assigned-courses.php', {ID: ID}, function (data) {
+                courses = JSON.parse(data);
+                console.log(courses);
+            for( i=0 ; i<courses.length ; i++ ) {
+                var item = '<div id="lists" class="wrapper">\n' +
+                    '    <h1 class="title"></h1>\n' +
+                    '    <div class="cols">\n' +
+                    '        <div class="col" ontouchstart="this.classList.toggle(\'hover\');">\n' +
+                    '            <div class="container-list">\n' +
+                    '                <div class="front" style="background-image: url(https://unsplash.it/500/500/)">\n' +
+                    '                    <div class="inner">\n' +
+                    '                        <p class="item-list-title">'+ courses[i]['name'] +'</p>\n' +
+                    '                        <span class="item-list-front">'+ courses[i]['ID'] +'</span>\n' +
+                    '                    </div>\n' +
+                    '                </div>\n' +
+                    '                <div class="back">\n' +
+                    '                    <div class="inner">\n' +
+                    '                        <p class="item-list-rear">'+ courses[i]['description'] +'</p>\n' +
+                    '                    </div>\n' +
+                    '                </div>\n' +
+                    '            </div>\n' +
+                    '        </div>\n' +
+                    '    </div>\n' +
+                    '</div>';
+                $('#list-body').append(item);
+                $('.item-list-rear').click(function () {
+                    $(this).css({'overflowY':'unset','')
+                })
+            }
             })
-        });
-        var courses;
-        var ID = "5001";
-        $.post('actions/assigned-courses.php', {ID: ID}, function (data) {
-            courses = JSON.parse(data);
-            console.log(courses);
         })
     }
 });

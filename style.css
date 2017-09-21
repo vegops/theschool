@@ -255,6 +255,9 @@ div.student-description .student-email:before, div.users-description .users-emai
     float: left;
     margin: 50px auto;
 }
+.counter .fa {
+    font-size: 56px;
+}
 .hider {
     position: absolute;
     top: 0;
