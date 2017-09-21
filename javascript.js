@@ -452,7 +452,7 @@ $(document).ready(function() {
                     '</div>';
                 $('#list-body').append(item);
                 $('.item-list-rear').click(function () {
-                    $(this).css({'overflowY':'unset','')
+                    $(this).css('overflowY','unset')
                 })
             }
             })
