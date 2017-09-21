@@ -24,4 +24,7 @@ class Application extends Actions
     public function DeleteItem($table, $name){ //calls delete item function
         return $this->RemoveItem($table, $name);
     }
+    public function ShowAssigned($ID){
+        return $this->GetAssigned($ID);
+    }
 }

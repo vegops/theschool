@@ -231,6 +231,7 @@ $(document).ready(function() {
                     deleteItem();
                     showCancel();
                     loadUpdateFormEvent()
+                    getCheckbox();
                 });
             });
         }, 500)
@@ -248,6 +249,7 @@ $(document).ready(function() {
     }                // delete item
     function insertNew(string) {
         $('#insert-'+string).on('click', function () {
+            setTimeout(function () {
             $('#upload-msg').text("");
             if(string === "courses") {
                 var name = $('#name').val();
@@ -274,6 +276,7 @@ $(document).ready(function() {
                             console.log(result);
                             reloadData();
                             loadCounters();
+                            $('#info-box').slideDown()
                         }
                     })
                 }
@@ -312,6 +315,8 @@ $(document).ready(function() {
                     })
                 }
             }
+            },1000)
+            $('#info-box').slideUp()
         });
 
     }           // adds new item
@@ -414,6 +419,20 @@ $(document).ready(function() {
                 })
             }, 300);
 
+        })
+    }
+    function getCheckbox() {
+        $.get('checkbox', function (checkbox) {
+            $('.students-course-list').html(checkbox);
+            $('label').click(function () {
+                $(this).parent('li').toggleClass('active');
+            })
+        });
+        var courses;
+        var ID = "5001";
+        $.post('actions/assigned-courses.php', {ID: ID}, function (data) {
+            courses = JSON.parse(data);
+            console.log(courses);
         })
     }
 });

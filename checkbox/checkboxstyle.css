@@ -1,0 +1,101 @@
+.checkboxs * {
+    box-sizing: border-box;
+}
+.checkbox-title {
+    margin-top: 50px;
+}
+#checkbox-list {
+    border-radius: 2px;
+    overflow: hidden;
+    width: 360px;
+    padding: 0;
+    float: left;
+}
+#checkbox-list li {
+    padding: 12px;
+    margin: auto;
+    position: relative;
+    overflow: hidden;
+}
+#checkbox-list li.active h4 {
+    color: white;
+}
+#checkbox-list li:before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: white;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+#checkbox-list li .circle {
+    width: 40px;
+    height: 40px;
+    background: #ccc;
+    border-radius: 9999px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 12px;
+    position: relative;
+    z-index: 10;
+    overflow: hidden;
+}
+#checkbox-list li .circle img {
+    width: 100%;
+}
+#checkbox-list li h4 {
+    display: inline-block;
+    font-family: "Roboto", Helvetica, sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    margin: 0;
+    vertical-align: middle;
+    position: relative;
+    z-index: 10;
+    transition: all .5s;
+}
+#checkbox-list li input {
+    vertical-align: middle;
+    display: none;
+}
+#checkbox-list li input + label {
+    display: inline-block;
+    background: #ccc;
+    width: 24px;
+    height: 24px;
+    border-radius: 2px;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    text-align: center;
+    padding-top: 3px;
+    color: transparent;
+    cursor: pointer;
+    transition: all .2s;
+}
+#checkbox-list li input + label:after {
+    content: '';
+    background: #D77400;
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    border-radius: 9999px;
+    transition: all 0.3s ease-in;
+    /*z-index: 0;*/
+}
+#checkbox-list li input:checked + label {
+    background: white;
+    color: #D77400;
+}
+#checkbox-list li input:checked + label:after {
+    width: 1000px;
+    height: 1000px;
+    top: -500px;
+    right: -500px;
+    background: #D77400;
+}
