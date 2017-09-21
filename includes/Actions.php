@@ -102,5 +102,20 @@ class Actions extends SchoolDb
         print_r($result);
     }
 
+    protected function GetAssigned($ID) {
+        $sql = "SELECT `ID`, `name`, `description` FROM `course_of_student` WHERE `student_ID`='$ID';";
+        $this->connect()->query('SET CHARACTER SET utf8');
+        $result = $this->connect()->query($sql);
+        if($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            print json_encode($data);
+
+        } else {
+            echo "no result";
+        }
+    }
+
 
 }

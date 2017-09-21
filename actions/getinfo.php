@@ -7,5 +7,4 @@ $table = htmlspecialchars($_POST['list']);
 
 $List = new  Application();
 $_SESSION[$table] = $List->showAllinfo($table);
-//echo ($List->showAllinfo($table));
 

@@ -30,4 +30,7 @@ class Application extends Actions
 	public function UpdateStudent($ID, $name, $phone, $email, $image, $table) { //calls insert function
 		return ($this->update_Student($ID, $name, $phone, $email, $image, $table));
 	}
+    public function ShowAssigned($ID){
+        return $this->GetAssigned($ID);
+    }
 }

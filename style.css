@@ -236,9 +236,9 @@ div.student-description, div.users-description {
     text-align: left;
     font-size: 0.5em;
 }
-/*div.student-description .student-phone, div.users-description .users-phone {*/
-    /*display: block;*/
-/*}*/
+div.student-description .student-phone, div.users-description .users-phone {
+    display: block;
+}
 div.student-description .student-phone:before, div.users-description .users-phone:before {
     content: "Phone: ";
 }
@@ -268,9 +268,8 @@ div.student-description .student-email:before, div.users-description .users-emai
     float: left;
     margin: 50px auto;
 }
-i.fa {
-    font-size: 50px;
-    margin: 10px;
+.counter .fa {
+    font-size: 56px;
 }
 .hider {
     position: absolute;
@@ -310,4 +309,7 @@ i.fa {
 }
 .flip {
     transform: rotateY(180deg);
+}
+#cancel {
+    margin: 10px;;
 }

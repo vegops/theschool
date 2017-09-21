@@ -238,6 +238,7 @@ $(document).ready(function() {
                     deleteItem();
                     showCancel();
                     loadUpdateFormEvent()
+                    getCheckbox();
                 });
             });
         }, 500)
@@ -255,6 +256,7 @@ $(document).ready(function() {
     }                // delete item
     function insertNew(string) {
         $('#insert-'+string).on('click', function () {
+            setTimeout(function () {
             $('#upload-msg').text("");
             if(string === "courses") {
                 var name = $('#name').val();
@@ -281,6 +283,7 @@ $(document).ready(function() {
                             console.log(result);
                             reloadData();
                             loadCounters();
+                            $('#info-box').slideDown()
                         }
                     })
                 }
@@ -319,6 +322,8 @@ $(document).ready(function() {
                     })
                 }
             }
+            },1000)
+            $('#info-box').slideUp()
         });
 
     }           // adds new item
@@ -425,6 +430,43 @@ $(document).ready(function() {
                 updateItem(headline);
             }, 300);
 
+        })
+    }
+    function getCheckbox() {
+        $.get('lists', function (list) {
+            $('.students-course-list').html(list);
+            var courses;
+            var ID = "5001";
+            $.post('actions/assigned-courses.php', {ID: ID}, function (data) {
+                courses = JSON.parse(data);
+                console.log(courses);
+            for( i=0 ; i<courses.length ; i++ ) {
+                var item = '<div id="lists" class="wrapper">\n' +
+                    '    <h1 class="title"></h1>\n' +
+                    '    <div class="cols">\n' +
+                    '        <div class="col" ontouchstart="this.classList.toggle(\'hover\');">\n' +
+                    '            <div class="container-list">\n' +
+                    '                <div class="front" style="background-image: url(https://unsplash.it/500/500/)">\n' +
+                    '                    <div class="inner">\n' +
+                    '                        <p class="item-list-title">'+ courses[i]['name'] +'</p>\n' +
+                    '                        <span class="item-list-front">'+ courses[i]['ID'] +'</span>\n' +
+                    '                    </div>\n' +
+                    '                </div>\n' +
+                    '                <div class="back">\n' +
+                    '                    <div class="inner">\n' +
+                    '                        <p class="item-list-rear">'+ courses[i]['description'] +'</p>\n' +
+                    '                    </div>\n' +
+                    '                </div>\n' +
+                    '            </div>\n' +
+                    '        </div>\n' +
+                    '    </div>\n' +
+                    '</div>';
+                $('#list-body').append(item);
+                $('.item-list-rear').click(function () {
+                    $(this).css('overflowY','unset')
+                })
+            }
+            })
         })
     }
     function updateItem(string) {
