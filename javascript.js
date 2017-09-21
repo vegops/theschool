@@ -207,6 +207,7 @@ $(document).ready(function() {
                 deleteItem();
                 showCancel();
                 loadUpdateFormEvent()
+                pullHeigher();
             });
         });
     }, 500)
@@ -462,6 +463,7 @@ $(document).ready(function() {
                         '    </div>\n' +
                         '</div>';
                     $('#list-body').append(item);
+                    pullHeigher();
                 }}
             })
         })
@@ -615,9 +617,8 @@ $(document).ready(function() {
 
     }
     function pullHeigher() {
-        var height = $('.container').height() + 120;
-        if( height < $('.info-outer').height() ) {
-            height += 80;
+        if( $('.container').height() < $('.info-outer').height() ) {
+            var height = $('.info-outer').height()+100;
             $('.container').height(height);
         }
     }
