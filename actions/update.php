@@ -16,13 +16,15 @@ if(isset($_POST['description'])){$description = htmlspecialchars($_POST['descrip
 if(isset($_POST['image'])){$image = htmlspecialchars($_POST['image']);}
 if(isset($_POST['email'])){$email = htmlspecialchars($_POST['email']);}
 if(isset($_POST['phone'])){$phone = htmlspecialchars($_POST['phone']);}
+if(isset($_POST['courses'])){$courses = (($_POST['courses']));}
+
 
 $item = new Application();
 
 if($table==='courses') {
     print ($item->UpdateCourse($ID, $name, $description, $image, $table));
 } elseif ($table==='students') {
-    print ($item->UpdateStudent($ID, $name, $phone, $email ,$image, $table));
+    print ($item->UpdateStudent($ID, $name, $phone, $email ,$image, $table, $courses));
 } else {
     echo "unknown error";
 }

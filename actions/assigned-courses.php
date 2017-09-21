@@ -4,5 +4,5 @@ session_start();
 $ID = htmlspecialchars($_POST['ID']);
 
 $List = new  Application();
-print_r( $List->ShowAssigned($ID) );
+$_SESSION['assignedCourses'] = ( $List->ShowAssigned($ID) );
 

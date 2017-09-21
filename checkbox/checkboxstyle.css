@@ -1,101 +1,50 @@
-.checkboxs * {
-    box-sizing: border-box;
-}
-.checkbox-title {
-    margin-top: 50px;
-}
-#checkbox-list {
-    border-radius: 2px;
-    overflow: hidden;
-    width: 360px;
-    padding: 0;
-    float: left;
-}
-#checkbox-list li {
-    padding: 12px;
-    margin: auto;
-    position: relative;
+
+.funkyradio div {
+    clear: both;
     overflow: hidden;
 }
-#checkbox-list li.active h4 {
-    color: white;
-}
-#checkbox-list li:before {
-    content: '';
+
+.funkyradio label {
     width: 100%;
-    height: 100%;
-    display: block;
-    background: white;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1;
+    border-radius: 3px;
+    border: 1px solid #D1D3D4;
+    font-weight: normal;
 }
-#checkbox-list li .circle {
-    width: 40px;
-    height: 40px;
-    background: #ccc;
-    border-radius: 9999px;
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 12px;
-    position: relative;
-    z-index: 10;
-    overflow: hidden;
-}
-#checkbox-list li .circle img {
-    width: 100%;
-}
-#checkbox-list li h4 {
-    display: inline-block;
-    font-family: "Roboto", Helvetica, sans-serif;
-    font-weight: 500;
-    font-size: 20px;
-    margin: 0;
-    vertical-align: middle;
-    position: relative;
-    z-index: 10;
-    transition: all .5s;
-}
-#checkbox-list li input {
-    vertical-align: middle;
+.funkyradio input[type="checkbox"]:empty {
     display: none;
 }
-#checkbox-list li input + label {
-    display: inline-block;
-    background: #ccc;
-    width: 24px;
-    height: 24px;
-    border-radius: 2px;
-    position: absolute;
-    right: 20px;
-    top: 20px;
-    text-align: center;
-    padding-top: 3px;
-    color: transparent;
+.funkyradio input[type="checkbox"]:empty ~ label {
+    position: relative;
+    line-height: 2.5em;
+    text-indent: 3.25em;
+    margin-top: 2em;
     cursor: pointer;
-    transition: all .2s;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
-#checkbox-list li input + label:after {
-    content: '';
-    background: #D77400;
-    width: 10px;
-    height: 10px;
+.funkyradio input[type="checkbox"]:empty ~ label:before {
     position: absolute;
-    right: 8px;
-    top: 8px;
-    border-radius: 9999px;
-    transition: all 0.3s ease-in;
-    /*z-index: 0;*/
+    display: block;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    content: '';
+    width: 2.5em;
+    background: #D1D3D4;
+    border-radius: 3px 0 0 3px;
 }
-#checkbox-list li input:checked + label {
-    background: white;
-    color: #D77400;
+.funkyradio input[type="checkbox"]:checked ~ label {
+    color: #777;
 }
-#checkbox-list li input:checked + label:after {
-    width: 1000px;
-    height: 1000px;
-    top: -500px;
-    right: -500px;
-    background: #D77400;
+.funkyradio input[type="checkbox"]:checked ~ label:before {
+    content: '\2714';
+    text-indent: .9em;
+    color: #333;
+    background-color: #ccc;
+}
+.funkyradio-info input[type="checkbox"]:checked ~ label:before {
+    color: #fff;
+    background-color: #d77400;
 }

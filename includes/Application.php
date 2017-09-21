@@ -27,8 +27,8 @@ class Application extends Actions
 	public function UpdateCourse($ID, $name, $description, $image, $table) { //calls insert function
 		return ( $this->update_Course($ID, $name, $description, $image, $table ) );
 	}
-	public function UpdateStudent($ID, $name, $phone, $email, $image, $table) { //calls insert function
-		return ($this->update_Student($ID, $name, $phone, $email, $image, $table));
+	public function UpdateStudent($ID, $name, $phone, $email, $image, $table, $courses) { //calls insert function
+		return ($this->update_Student($ID, $name, $phone, $email, $image, $table, $courses));
 	}
     public function ShowAssigned($ID){
         return $this->GetAssigned($ID);

@@ -236,9 +236,6 @@ div.student-description, div.users-description {
     text-align: left;
     font-size: 0.5em;
 }
-div.student-description .student-phone, div.users-description .users-phone {
-    display: block;
-}
 div.student-description .student-phone:before, div.users-description .users-phone:before {
     content: "Phone: ";
 }
@@ -312,4 +309,29 @@ div.student-description .student-email:before, div.users-description .users-emai
 }
 #cancel {
     margin: 10px;;
+}
+
+@media only screen and (max-width: 1200px) {
+    img.student-img {
+        margin-right: 5px !important;
+    }
+    span.student-name.col-8 {
+        font-size: 0.6em;
+    }
+}
+@media only screen and (max-width: 992px) {
+    .info-outer {
+        position: unset !important;
+    }
+}
+@media only screen and (max-width: 768px) {
+    span.course-img {
+        left: 17% !important;
+    }
+}
+@media only screen and (max-width: 576px) {
+    span.course-img {
+        left: 40% !important;
+        top: -5px !important;
+    }
 }

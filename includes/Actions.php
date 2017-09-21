@@ -5,7 +5,7 @@
  * Date: 31/08/2017
  * Time: 02:42
  */
-
+session_start();
 class Actions extends SchoolDb
 {
     public $data;
@@ -81,7 +81,7 @@ class Actions extends SchoolDb
 			var_dump(($rows_affected));
 		}
 	}
-	protected function update_Student($ID, $name, $phone, $email, $image, $table) { //update a student
+	protected function update_Student($ID, $name, $phone, $email, $image, $table, $courses) { //update a student
 		if ($table === 'administrator') {
 			$data = 'NOT ALLOWED';
 			return $data;
@@ -93,6 +93,14 @@ class Actions extends SchoolDb
 			echo " ".$rows_affected." Student updated.";
 		} else {
 			echo "Can't update the ". mysqli_error($this->connect())."";
+		}
+		if( count($courses) > 0 ) {
+			$sql1 = " DELETE FROM `students_courses` WHERE `student_ID` = '$ID' ";
+			$this->connect()->query( $sql1 );
+			for ( $i = 0; $i < count( $courses ); $i ++ ) {
+				$sql2 = "INSERT INTO `students_courses` (`student_ID`,`courses_ID`) VALUES ('$ID','$courses[$i]');";
+				$this->connect()->query( $sql2 );
+			}
 		}
 	}
 

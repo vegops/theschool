@@ -29,16 +29,16 @@ $(document).ready(function() {
                     break;
             }
         }
-    })
+    });
 
     //if user role is admin - gets the administrator btn
     $.get('main.php', function (admin) {
         if (admin !== "") {
             $('.navbar-nav').append(admin);
         }
-    })
+    });
 
-    loadCounters()
+    loadCounters();
     getCourses();
     getStudents();
     addCourseClickInfo();
@@ -63,7 +63,7 @@ $(document).ready(function() {
             })
         }, 300);
 
-    })
+    });
 
 
     //return to school view
@@ -71,7 +71,7 @@ $(document).ready(function() {
         $('.courses').parent().fadeIn();
         $('.students').parent().fadeIn();
         $('.users').parent().fadeOut();
-    })
+    });
 
     //load admin panel
     setTimeout(function () {
@@ -105,24 +105,25 @@ $(document).ready(function() {
         reloadData();
         $(this).attr('class','');
         $(this).parent().find('label').text('info');
-    })
+        $('.container').height(552)
+    });
 
     //
     $('.user-name').click(function () {
         $('#popup-layover').slideDown();
         $('#navbar').toggleClass('blur');
         $('.container').toggleClass('blur');
-    })
+    });
     $('.close').click(function () {
         $('#popup-layover').slideUp();
         $('#navbar').toggleClass('blur');
         $('.container').toggleClass('blur');
-    })
+    });
 
     var c = document.getElementById("close-Canvas");
     var ctx = c.getContext("2d");
     ctx.fillStyle = "#D77400";
-    ctx.moveTo(0,0)
+    ctx.moveTo(0,0);
     ctx.lineTo(100,100);
     ctx.lineTo(100,0);
     ctx.fill();
@@ -130,7 +131,7 @@ $(document).ready(function() {
     var c = document.getElementById("edit-Canvas");
     var ctx = c.getContext("2d");
     ctx.fillStyle = "#D77400";
-    ctx.moveTo(0,100)
+    ctx.moveTo(0,100);
     ctx.lineTo(100,100);
     ctx.lineTo(100,0);
     ctx.fill();
@@ -220,10 +221,10 @@ $(document).ready(function() {
                 var imgObject = $(this).find('.student-img').clone();
                 imgObject.attr('style','position: absolute;');
                 var phone = $(this).find('.student-phone').clone();
-                phone.attr('class',"student-phone student-phone-info offset-3 col-6");
+                phone.attr('class',"student-phone student-phone-info offset-md-2 col-md-4 offset-3 col-6");
                 phone.attr('style',"font-size: 14px;");
-                var email = $(this).find('.student-email').clone()
-                email.attr('class',"student-email student-email-info offset-3 col-6");
+                var email = $(this).find('.student-email').clone();
+                email.attr('class',"student-email student-email-info offset-md-2 col-md-8 offset-3 col-6");
                 email.attr('style',"font-size: 14px;");
                 var IDelement = $(this).find('.student-ID').clone();
                 IDelement.attr('style','font-size: 14px;');
@@ -237,8 +238,8 @@ $(document).ready(function() {
                     $('.student-description-info').append(email);
                     deleteItem();
                     showCancel();
-                    loadUpdateFormEvent()
-                    getCheckbox();
+                    loadUpdateFormEvent();
+                    getAssignedCourses(IDelement.text());
                 });
             });
         }, 500)
@@ -247,11 +248,13 @@ $(document).ready(function() {
     function deleteItem() {
         $('.course-delete').click(function () {
             var name = $(this).closest('.info-con').find('h4').text();
-            var table = $(this).attr('class').replace("-delete info-btn","s");
+            var table = $(this).attr('class').replace("-delete info-btn delete-btn","s");
             $.post('actions/delete.php',{ table: table, name: name } , function (data) {
+                console.log(data);
                 $('.selected').text(data);
                 $('.selected').fadeOut(1000);
             })
+            endOfEdit('Deleted');
         })
     }                // delete item
     function insertNew(string) {
@@ -281,9 +284,7 @@ $(document).ready(function() {
                         type: 'post',
                         success: function (result) {
                             console.log(result);
-                            reloadData();
-                            loadCounters();
-                            $('#info-box').slideDown()
+                            endOfEdit(result);
                         }
                     })
                 }
@@ -316,14 +317,12 @@ $(document).ready(function() {
                         type: 'post',
                         success: function (result) {
                             console.log(result);
-                            reloadData();
-                            loadCounters();
+                            endOfEdit(result);
                         }
                     })
                 }
             }
-            },1000)
-            $('#info-box').slideUp()
+            },1000);
         });
 
     }           // adds new item
@@ -341,7 +340,6 @@ $(document).ready(function() {
                     "                    </li>";
                 $('.users').append(singleuser);
             }
-            ;
             $('.students-container').text("Students (" + users.length + ")");
 
 
@@ -360,7 +358,6 @@ $(document).ready(function() {
                     "                    </li>";
                 $('.students').append(singlestudent);
             }
-            ;
             $('.students-container').text("Students (" + students.length + ")");
             $("#students-count").attr("data-to", students.length);
         });
@@ -372,17 +369,16 @@ $(document).ready(function() {
             courses = JSON.parse(data);
             for (var i = 0; i < courses.length; i++) {
                 var singleCourse = "<li class='course' title='click for full description'>\n" +
-                    "                            <span class='course-name col-sm-12 col-md-6'>" + courses[i]['name'] + "</span>\n" +
-                    "                            <span class='course-img col-sm-12 col-md-6' style=\"background-image: \n" +
+                    "                            <span class='course-name col-xs-6 col-sm-6 col-md-6'>" + courses[i]['name'] + "</span>\n" +
+                    "                            <span class='course-img col-xs-6 col-sm-6 col-md-6' style=\"background-image: \n" +
                     "                                   url('" + courses[i]['image'] + "');\">\n" +
                     "                                   </span> " +
                     "                            <p class='course-description'>"+ courses[i]['description'] +"</p>\n" +
-                    "                            <span class='course-ID'>"+ courses[i]['ID'] +"</span>\n"
+                    "                            <span class='course-ID'>"+ courses[i]['ID'] +"</span>\n";
                 "                    </li>";
 
                 $('.courses').append(singleCourse);
             }
-            ;
             $('.courses-container').text("Courses (" + courses.length + ")");
             $("#courses-count").attr("data-to", courses.length);
         });
@@ -426,49 +422,50 @@ $(document).ready(function() {
                     $('#description').val(description);
                     $('#upload-result').attr('src',src);
                     $('#ID').val(ID);
-                })
+                });
                 updateItem(headline);
+                getCheckboxs();
             }, 300);
 
         })
-    }
-    function getCheckbox() {
+    } // loads the update on click with item values
+    function getAssignedCourses(studentID) {
         $.get('lists', function (list) {
             $('.students-course-list').html(list);
             var courses;
-            var ID = "5001";
+            var ID = studentID;
             $.post('actions/assigned-courses.php', {ID: ID}, function (data) {
-                courses = JSON.parse(data);
-                console.log(courses);
-            for( i=0 ; i<courses.length ; i++ ) {
-                var item = '<div id="lists" class="wrapper">\n' +
-                    '    <h1 class="title"></h1>\n' +
-                    '    <div class="cols">\n' +
-                    '        <div class="col" ontouchstart="this.classList.toggle(\'hover\');">\n' +
-                    '            <div class="container-list">\n' +
-                    '                <div class="front" style="background-image: url(https://unsplash.it/500/500/)">\n' +
-                    '                    <div class="inner">\n' +
-                    '                        <p class="item-list-title">'+ courses[i]['name'] +'</p>\n' +
-                    '                        <span class="item-list-front">'+ courses[i]['ID'] +'</span>\n' +
-                    '                    </div>\n' +
-                    '                </div>\n' +
-                    '                <div class="back">\n' +
-                    '                    <div class="inner">\n' +
-                    '                        <p class="item-list-rear">'+ courses[i]['description'] +'</p>\n' +
-                    '                    </div>\n' +
-                    '                </div>\n' +
-                    '            </div>\n' +
-                    '        </div>\n' +
-                    '    </div>\n' +
-                    '</div>';
-                $('#list-body').append(item);
-                $('.item-list-rear').click(function () {
-                    $(this).css('overflowY','unset')
-                })
-            }
+                if(data==="no result") {
+                    $('.lists-title').text("No courses found.");
+                } else {
+                    courses = JSON.parse(data);
+                    console.log(courses);
+                for( i=0 ; i<courses.length ; i++ ) {
+                    var item = '<div id="lists" class="wrapper">\n' +
+                        '    <h1 class="title"></h1>\n' +
+                        '    <div class="cols">\n' +
+                        '        <div class="col" ontouchstart="this.classList.toggle(\'hover\');">\n' +
+                        '            <div class="container-list">\n' +
+                        '                <div class="front" style="background-image: url(images/magic-book.jpg)">\n' +
+                        '                    <div class="inner">\n' +
+                        '                        <p class="item-list-title">'+ courses[i]['name'] +'</p>\n' +
+                        '                        <span class="item-list-front">'+ courses[i]['ID'] +'</span>\n' +
+                        '                    </div>\n' +
+                        '                </div>\n' +
+                        '                <div class="back">\n' +
+                        '                    <div class="inner">\n' +
+                        '                        <p class="item-list-rear">'+ courses[i]['description'] +'</p>\n' +
+                        '                    </div>\n' +
+                        '                </div>\n' +
+                        '            </div>\n' +
+                        '        </div>\n' +
+                        '    </div>\n' +
+                        '</div>';
+                    $('#list-body').append(item);
+                }}
             })
         })
-    }
+    } // loads courses by student ID
     function updateItem(string) {
         $('#update-'+string).on('click', function () {
             $('#upload-msg').text("");
@@ -507,6 +504,11 @@ $(document).ready(function() {
                 var phone = $('#phone').val();
                 var email = $('#email').val();
                 var image = $('#upload-result').attr('src');
+                var courses = [];
+                for( i=0 ; i<$('input:checked').length ; i++ ){
+                    courses.push($('input:checked')[i].id);
+                }
+
                 if (name.length === 0 || phone.length === 0) {
                     $('#upload-msg').text("Please fill all the fields");
                     $('#upload-msg').css('color', 'red')
@@ -524,7 +526,8 @@ $(document).ready(function() {
                         name: fLetterUpperCase(name),
                         phone: phone,
                         email: email,
-                        image: image
+                        image: image,
+                        courses: (courses)
                     };
                     $.ajax({
                         url: 'actions/update.php', //targets the insert data file
@@ -540,9 +543,63 @@ $(document).ready(function() {
             }
         });
 
-    }
+    } //update item
+    function getCheckboxs() {
+        var allCourses = "";
+        var assigned = "";
+        $.get('checkbox', function (checkboxs) {
+            $('.available-courses-list').html(checkboxs);
+        });
+
+        $.post('actions/getinfo.php', {list: 'courses'}, function (data) {
+            allCourses = JSON.parse(data);
+            setTimeout(function () {
+                var ID = $('#ID').val();
+                $.post('actions/assigned-courses.php', {ID: ID}, function (data) {
+                    if (data === "no result") {
+                        $('.lists-title').text("No courses found.");
+                    } else {
+                        assigned = JSON.parse(data);
+                    }
+                    console.log(allCourses);
+                    console.log(assigned);
+                    for( i=0 ; i<allCourses.length ; i++ ){
+                        for( z=0 ; z<assigned.length ; z++ ) {
+                            if( allCourses[i]['ID'] == assigned[z]['ID'] ) {
+                                var li = '    <div class="funkyradio">\n' +
+                                    '        <div class="funkyradio-info">\n' +
+                                    '            <input type="checkbox" name="checkbox" id="'+ allCourses[i]['ID'] +'" checked/>\n' +
+                                    '            <label for="'+ allCourses[i]['ID'] +'">'+ allCourses[i]['name'] +'</label>\n' +
+                                    '        </div>\n' +
+                                    '    </div>';
+                                $('#student-courses-list').append(li);
+
+                                pullHeigher();
+                                allCourses[i] = "";
+                            }
+                        }
+                        if( allCourses[i] != "" ) {
+                            var li = '    <div class="funkyradio">\n' +
+                                '        <div class="funkyradio-info">\n' +
+                                '            <input type="checkbox" name="checkbox" id="' + allCourses[i]['ID'] + '"/>\n' +
+                                '            <label for="' + allCourses[i]['ID'] + '">' + allCourses[i]['name'] + '</label>\n' +
+                                '        </div>\n' +
+                                '    </div>';
+                            $('#student-courses-list').append(li);
+                            pullHeigher()
+                        }
+                    }
+
+                });
+            },500)
+
+        });
+
+
+    } // loads the checkboxs
+
     function endOfEdit(string) {
-        var box = $('#info-box')
+        var box = $('#info-box');
         setTimeout(function () {
             $('#info-box').addClass('flip');
             box.html("<img src='images/success.png' width='60%'><div></div>");
@@ -550,10 +607,18 @@ $(document).ready(function() {
         },500);
         setTimeout(function () {
             reloadData();
-            loadCounters()
+            loadCounters();
             box.removeClass('flip');
+            $('.container').height(552);
+        },2000);
 
-        },3000);
 
+    }
+    function pullHeigher() {
+        var height = $('.container').height() + 120;
+        if( height < $('.info-outer').height() ) {
+            height += 80;
+            $('.container').height(height);
+        }
     }
 });

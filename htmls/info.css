@@ -17,3 +17,6 @@ div.course-img-info span {
     transform: scale(1.9);
     border: 2px solid #D77400;
 }
+h4.student-name-info {
+    margin-left: 9px;
+}
