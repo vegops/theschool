@@ -24,4 +24,10 @@ class Application extends Actions
     public function DeleteItem($table, $name){ //calls delete item function
         return $this->RemoveItem($table, $name);
     }
+	public function UpdateCourse($ID, $name, $description, $image, $table) { //calls insert function
+		return ( $this->update_Course($ID, $name, $description, $image, $table ) );
+	}
+	public function UpdateStudent($ID, $name, $phone, $email, $image, $table) { //calls insert function
+		return ($this->update_Student($ID, $name, $phone, $email, $image, $table));
+	}
 }

@@ -66,6 +66,35 @@ class Actions extends SchoolDb
             print_r($this->connect());
         }
     }
+	protected function update_Course($ID, $name, $description, $image, $table) {  //update a course
+		if ($table === 'administrator') {
+			$data = 'NOT ALLOWED';
+			return $data;
+		}
+		$sql = "UPDATE $table SET `name`='$name', `description`='$description', `image`='$image' WHERE `$table`.`ID`='$ID';";
+		$rows_affected = $this->connect()->query($sql);
+		if(($rows_affected)) {
+			echo "Success,";
+			echo " ".$rows_affected." Course updated.";
+		} else {
+//			echo "Can't update the course";
+			var_dump(($rows_affected));
+		}
+	}
+	protected function update_Student($ID, $name, $phone, $email, $image, $table) { //update a student
+		if ($table === 'administrator') {
+			$data = 'NOT ALLOWED';
+			return $data;
+		}
+		$sql = "UPDATE $table SET `name`='$name', `phone`='$phone', `email`='$email', `image`='$image' WHERE `$table`.`ID`='$ID';";
+		$rows_affected = $this->connect()->query($sql);
+		if(($rows_affected)) {
+			echo "Success,";
+			echo " ".$rows_affected." Student updated.";
+		} else {
+			echo "Can't update the ". mysqli_error($this->connect())."";
+		}
+	}
 
     protected function RemoveItem($table, $name) {  //deletes row from DB
         $sql = "DELETE FROM `$table` WHERE `$table`.`name` = '$name'";

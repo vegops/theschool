@@ -9,10 +9,16 @@ but it's a start on the frontend at least.
 -->
     <div class="form-container">
         <div class="row input-container">
-            <div class="col-12">
-                <div class="styled-input wide">
+            <div class="col-6">
+                <div class="styled-input ">
                     <input type="text" id="name" name="name" required />
                     <label>Course Name</label>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="styled-input ">
+                    <input type="text" id="ID" name="ID" disabled style="text-align: end; cursor: not-allowed;" />
+                    <label>Course ID</label>
                 </div>
             </div>
             <div class="col-12">
@@ -32,7 +38,7 @@ but it's a start on the frontend at least.
                     <img id="upload-result" src="" width="50px">
                 </div>
                 <div class="col-6" style="float: right; padding: 6px; margin: 0; display: block;"  >
-                    <div id="insert-courses" class="btn-outline-success submit-btn">Update course</div>
+                    <div id="update-courses" class="btn-outline-success submit-btn">Update course</div>
                 </div>
             </div>
         </div>

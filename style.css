@@ -219,13 +219,26 @@ p.course-description {
     border-radius: 4px;
     z-index: 3;
 }
+.course-ID {
+    display: none;
+}
+h6.course-ID-info {
+    line-height: inherit;
+}
+h6.course-ID-info::before, .student-ID-info::before {
+    content: "(";
+}
+h6.course-ID-info::after, .student-ID-info::after {
+    content: ")";
+}
+
 div.student-description, div.users-description {
     text-align: left;
     font-size: 0.5em;
 }
-div.student-description .student-phone, div.users-description .users-phone {
-    display: block;
-}
+/*div.student-description .student-phone, div.users-description .users-phone {*/
+    /*display: block;*/
+/*}*/
 div.student-description .student-phone:before, div.users-description .users-phone:before {
     content: "Phone: ";
 }
@@ -291,4 +304,10 @@ i.fa {
     -o-filter: blur(5px);
     -ms-filter: blur(5px);
     filter: blur(5px);
+}
+#info-box {
+    transition: 500ms ease;
+}
+.flip {
+    transform: rotateY(180deg);
 }
