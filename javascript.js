@@ -68,34 +68,146 @@ $(document).ready(function() {
 
     //return to school view
     $('.school').click(function () {
-        $('.courses').parent().fadeIn();
-        $('.students').parent().fadeIn();
-        $('.users').parent().fadeOut();
+        if( $('#none').attr('class') == 'admin-view' ) {
+            flip($('.left-part'));
+            setTimeout(function () {
+                var html = $('#none').html();
+                $('#none').html($('.left-part').html());
+                $('#none').attr('class','school-view')
+                $('.left-part').html(html);
+            },500);
+        }
     });
 
     //load admin panel
     setTimeout(function () {
-        $("#administrator-btn").click(function () {
+        $("#administrator-btn").click(function (e) {
+
             var cont = $('.students').parent().parent();
             if($('.users').length === 0 ) {
-                var userBox = cont.find('.students').parent().clone();
+                flip($('.left-part'));
+                setTimeout(function () {
+                    $('.row').find('.students').parent().addClass('none');
+                    $('.row').find('.courses').parent().addClass('none');
 
-                userBox.find('label').attr('class', 'users-container');
-                userBox.find('label').text('Users');
-                userBox.css('position','absolute');
-                userBox.find('ul').attr('class', 'users list');
-                userBox.find('ul').html("");
-                $('.row').find('.students').parent().fadeOut();
-                $('.row').find('.courses').parent().fadeOut();
-                cont.find('.info-container').parent().before(userBox);
+                    var userBox = '<div class="col-md-6 col-lg-6 left">\n' +
+                        '                <label class="users-container">Users</label><span class="add-btn">&#43;</span>\n' +
+                        '                <ul class="users list">\n' +
+                        '                </ul>\n' +
+                        '            </div>\n' +
+                        '            <div class="col-md-6 col-lg-6 left">\n' +
+                        '                <label class="empty-container">Add new user</label><span class="add-btn">&#43;</span>\n' +
+                        '                <ul class="empty list">\n' +
+                        '                   <div class="user-type admin-type"><table class="blueTable">\n' +
+                        '<thead>\n' +
+                        '<tr>\n' +
+                        '<th id="t-head">Sales</th>\n' +
+                        '<th>view</th>\n' +
+                        '<th>edit</th>\n' +
+                        '<th>create</th>\n' +
+                        '</tr>\n' +
+                        '</thead>\n' +
+                        '<tbody>\n' +
+                        '<tr>\n' +
+                        '<td>Students</td>\n' +
+                        '<td>&check;</td>\n' +
+                        '<td>&cross;</td>\n' +
+                        '<td>&cross;</td>\n' +
+                        '</tr>\n' +
+                        '<tr>\n' +
+                        '<td>Courses</td>\n' +
+                        '<td>&check;</td>\n' +
+                        '<td>&cross;</td>\n' +
+                        '<td>&cross;</td>\n' +
+                        '</tr>\n' +
+                        '<tr>\n' +
+                        '<td>Admins</td>\n' +
+                        '<td>&check;</td>\n' +
+                        '<td>&cross;</td>\n' +
+                        '<td>&cross;</td>\n' +
+                        '</tr>\n' +
+                        '</tbody>\n' +
+                        '</table></div>\n'+
+                        '                   <div class="user-type manager-type"><table class="blueTable">\n' +
+                        '<thead>\n' +
+                        '<tr>\n' +
+                        '<th id="t-head">Manager</th>' +
+                        '<th>view</th>\n' +
+                        '<th>edit</th>\n' +
+                        '<th>create</th>\n' +
+                        '</tr>\n' +
+                        '</thead>\n' +
+                        '<tbody>\n' +
+                        '<tr>\n' +
+                        '<td>Students</td>\n' +
+                        '<td>&check;</td>\n' +
+                        '<td>&check;</td>\n' +
+                        '<td>&check;</td>\n' +
+                        '</tr>\n' +
+                        '<tr>\n' +
+                        '<td>Courses</td>\n' +
+                        '<td>&check;</td>\n' +
+                        '<td>&check;</td>\n' +
+                        '<td>&check;</td>\n' +
+                        '</tr>\n' +
+                        '<tr>\n' +
+                        '<td>Admins</td>\n' +
+                        '<td>&check;</td>\n' +
+                        '<td>&cross;</td>\n' +
+                        '<td>&cross;</td>\n' +
+                        '</tr>\n' +
+                        '</tbody>\n' +
+                        '</table></div>\n'+
+                        '                   <div class="user-type sales-type"><table class="blueTable">\n' +
+                        '<thead>\n' +
+                        '<tr>\n' +
+                        '<th id="t-head">Owner</th>' +
+                        '<th>view</th>\n' +
+                        '<th>edit</th>\n' +
+                        '<th>create</th>\n' +
+                        '</tr>\n' +
+                        '</thead>\n' +
+                        '<tbody>\n' +
+                        '<tr>\n' +
+                        '<td>Students</td>\n' +
+                        '<td>&check;</td>\n' +
+                        '<td>&check;</td>\n' +
+                        '<td>&check;</td>\n' +
+                        '</tr>\n' +
+                        '<tr>\n' +
+                        '<td>Courses</td>\n' +
+                        '<td>&check;</td>\n' +
+                        '<td>&check;</td>\n' +
+                        '<td>&check;</td>\n' +
+                        '</tr>\n' +
+                        '<tr>\n' +
+                        '<td>Admins</td>\n' +
+                        '<td>&check;</td>\n' +
+                        '<td>&check;</td>\n' +
+                        '<td>&check;</td>\n' +
+                        '</tr>\n' +
+                        '</tbody>\n' +
+                        '</table></div>\n'+
+                        '                </ul>\n' +
+                        '            </div>';
+                    cont.find('.info-container').parent().before(userBox);
+                    getUsers();
+                    $('#none').html($('.left-part').html());
+                    $('#none').attr('class','admin-view');
+                    $('.left-part').html(userBox);
+                },500);
 
-                getUsers();
             } else {
-                $('.users').parent().fadeIn();
-                $('.courses').parent().fadeOut();
-                $('.students').parent().fadeOut();
+                if( $('#none').attr('class') == 'school-view' ) {
+                    flip($('.left-part'));
+                    setTimeout(function () {
+                        var html = $('#none').html();
+                        $('#none').html($('.left-part').html());
+                        $('#none').attr('class','admin-view');
+                        $('.left-part').html(html);
+                    },500);
+                }
             }
-
         });
     },200);
 
@@ -105,7 +217,6 @@ $(document).ready(function() {
         reloadData();
         $(this).attr('class','');
         $(this).parent().find('label').text('info');
-        $('.container').height(552)
     });
 
     //
@@ -207,7 +318,6 @@ $(document).ready(function() {
                 deleteItem();
                 showCancel();
                 loadUpdateFormEvent()
-                pullHeigher();
             });
         });
     }, 500)
@@ -463,7 +573,6 @@ $(document).ready(function() {
                         '    </div>\n' +
                         '</div>';
                     $('#list-body').append(item);
-                    pullHeigher();
                 }}
             })
         })
@@ -575,8 +684,6 @@ $(document).ready(function() {
                                     '        </div>\n' +
                                     '    </div>';
                                 $('#student-courses-list').append(li);
-
-                                pullHeigher();
                                 allCourses[i] = "";
                             }
                         }
@@ -588,7 +695,6 @@ $(document).ready(function() {
                                 '        </div>\n' +
                                 '    </div>';
                             $('#student-courses-list').append(li);
-                            pullHeigher()
                         }
                     }
 
@@ -611,15 +717,13 @@ $(document).ready(function() {
             reloadData();
             loadCounters();
             box.removeClass('flip');
-            $('.container').height(552);
         },2000);
-
-
     }
-    function pullHeigher() {
-        if( $('.container').height() < $('.info-outer').height() ) {
-            var height = $('.info-outer').height()+100;
-            $('.container').height(height);
-        }
+    function flip(elemtnt) {
+        elemtnt.toggleClass('flip90');
+        setTimeout(function () {
+            elemtnt.toggleClass('flip90');
+        },500)
+
     }
 });
