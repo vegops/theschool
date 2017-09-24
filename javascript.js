@@ -1,7 +1,6 @@
+var user;
 $(document).ready(function() {
-
     // load user data
-    var user;
     $.get('user.php', function (userData) {
         if (userData === 'no user') {
             window.location.replace("login/login.html");
@@ -68,27 +67,24 @@ $(document).ready(function() {
 
     //return to school view
     $('.school').click(function () {
-        if( $('#none').attr('class') == 'admin-view' ) {
-            flip($('.left-part'));
+        if( $('#none').hasClass('admin-view') ) {
             setTimeout(function () {
-                var html = $('#none').html();
-                $('#none').html($('.left-part').html());
-                $('#none').attr('class','school-view')
-                $('.left-part').html(html);
-            },500);
+                flip($('#left-section'));
+                $('#none').removeClass('school-view')
+                $('#none').addClass('none');
+                $('#left-section').removeClass('none')
+            },200);
+            flip($('#none'));
         }
     });
 
     //load admin panel
     setTimeout(function () {
         $("#administrator-btn").click(function (e) {
-
-            var cont = $('.students').parent().parent();
-            if($('.users').length === 0 ) {
-                flip($('.left-part'));
+            if($('#left-section').hasClass('school-view')) {
+                flip($('#left-section'));
                 setTimeout(function () {
-                    $('.row').find('.students').parent().addClass('none');
-                    $('.row').find('.courses').parent().addClass('none');
+                    $('#left-section').addClass('none');
 
                     var userBox = '<div class="col-md-6 col-lg-6 left">\n' +
                         '                <label class="users-container">Users</label><span class="add-btn">&#43;</span>\n' +
@@ -96,7 +92,7 @@ $(document).ready(function() {
                         '                </ul>\n' +
                         '            </div>\n' +
                         '            <div class="col-md-6 col-lg-6 left">\n' +
-                        '                <label class="empty-container">Add new user</label><span class="add-btn">&#43;</span>\n' +
+                        '                <label class="empty-container">Type of users:</label>\n' +
                         '                <ul class="empty list">\n' +
                         '                   <div class="user-type admin-type"><table class="blueTable">\n' +
                         '<thead>\n' +
@@ -111,8 +107,8 @@ $(document).ready(function() {
                         '<tr>\n' +
                         '<td>Students</td>\n' +
                         '<td>&check;</td>\n' +
-                        '<td>&cross;</td>\n' +
-                        '<td>&cross;</td>\n' +
+                        '<td>&check;</td>\n' +
+                        '<td>&check;</td>\n' +
                         '</tr>\n' +
                         '<tr>\n' +
                         '<td>Courses</td>\n' +
@@ -122,7 +118,7 @@ $(document).ready(function() {
                         '</tr>\n' +
                         '<tr>\n' +
                         '<td>Admins</td>\n' +
-                        '<td>&check;</td>\n' +
+                        '<td>&cross;</td>\n' +
                         '<td>&cross;</td>\n' +
                         '<td>&cross;</td>\n' +
                         '</tr>\n' +
@@ -153,8 +149,8 @@ $(document).ready(function() {
                         '<tr>\n' +
                         '<td>Admins</td>\n' +
                         '<td>&check;</td>\n' +
-                        '<td>&cross;</td>\n' +
-                        '<td>&cross;</td>\n' +
+                        '<td>&check;</td>\n' +
+                        '<td>&check;</td>\n' +
                         '</tr>\n' +
                         '</tbody>\n' +
                         '</table></div>\n'+
@@ -190,22 +186,19 @@ $(document).ready(function() {
                         '</table></div>\n'+
                         '                </ul>\n' +
                         '            </div>';
-                    cont.find('.info-container').parent().before(userBox);
                     getUsers();
-                    $('#none').html($('.left-part').html());
-                    $('#none').attr('class','admin-view');
-                    $('.left-part').html(userBox);
-                },500);
+                    $('#none').removeClass('none');
+                    $('#none').html(userBox);
+                    flip($('#none'));
+                },300);
+
 
             } else {
-                if( $('#none').attr('class') == 'school-view' ) {
-                    flip($('.left-part'));
+                if($('#left-section').hasClass('school-view')) {
+                    flip($('#left-section'));
                     setTimeout(function () {
-                        var html = $('#none').html();
-                        $('#none').html($('.left-part').html());
-                        $('#none').attr('class','admin-view');
-                        $('.left-part').html(html);
-                    },500);
+                        flip($('#none'));
+                    },300);
                 }
             }
         });
@@ -259,7 +252,7 @@ $(document).ready(function() {
         addCourseClickInfo();
         addStudentClickInfo();
         $('.info-container').text('info');
-        $('#cancel').remove();
+        $('#cancel').addClass('none');
 
     }                // reloads all data
     function clearSelected() {
@@ -441,6 +434,7 @@ $(document).ready(function() {
         $('.users').html("");
         var users;
         $.post('actions/getinfo.php', {list: 'administrator'}, function (data) {
+            console.log(data);
             users = JSON.parse(data);
             for (var i = 0; i < users.length; i++) {
                 var singleuser = "<li class='single-user' title='click for more details'>\n" +
@@ -723,7 +717,7 @@ $(document).ready(function() {
         elemtnt.toggleClass('flip90');
         setTimeout(function () {
             elemtnt.toggleClass('flip90');
-        },500)
+        },300)
 
     }
 });

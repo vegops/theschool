@@ -3,6 +3,9 @@ body {
     background: url('images/notebook-background.jpg') #fff;
     overflow-y: scroll;
 }
+.none {
+    display: none !important;
+}
 .left {
     float: left;
     display: inline-block;
@@ -11,7 +14,7 @@ body {
     float: right;
     display: inline-block;
 }
-.left-part{
+.left-part, #none {
     transition: 500ms ease;
 }
 .search-bar {
