@@ -44,25 +44,31 @@ $(document).ready(function() {
     addStudentClickInfo();
 
     // load form
-    $('.add-btn').on('click',function () {
-        clearSelected();
-        var headline = $(this).parent().find('ul').attr('class').replace('list','').trim();
-        if (headline === 'courses') {
-            $('.info').load('form/form-courses.html');
-        } else {
-            $('.info').load('form/form-students.html');
-        }
-        setTimeout(function(){
-            $('.form-container').ready(function () {
-                fileUpload();
-                insertNew(headline);
-                headline = fLetterUpperCase(headline);
-                $('.info-container').text('Add to '+headline);
-                showCancel();
-            })
-        }, 300);
+    function additemBtn() {
+        $('.add-btn').click(function () {
+            clearSelected();
+            var headline = $(this).parent().find('ul').attr('class').replace('list', '').trim();
+            if (headline === 'courses') {
+                $('.info').load('form/form-courses.html');
+            } else if (headline === 'students') {
+                $('.info').load('form/form-students.html');
+            } else if (headline === 'users') {
+                $('.info').load('form/form-users.html');
+            }
+            setTimeout(function () {
+                $('.form-container').ready(function () {
+                    fileUpload();
+                    insertNew(headline);
+                    headline = fLetterUpperCase(headline);
+                    $('.info-container').text('Add to ' + headline);
+                    showCancel();
+                })
+            }, 300);
 
-    });
+        });
+    };
+    additemBtn();
+
 
 
     //return to school view
@@ -190,6 +196,8 @@ $(document).ready(function() {
                     $('#none').removeClass('none');
                     $('#none').html(userBox);
                     flip($('#none'));
+                    addUserClickInfo();
+                    additemBtn();
                 },300);
 
 
@@ -280,7 +288,6 @@ $(document).ready(function() {
                 type: 'post',
                 success: function(php_script_response){
                     if(php_script_response.charAt(0)==='S'){
-                        console.log(php_script_response);
                         $('#upload-msg').text(php_script_response);
                     } else {
                         var response = JSON.parse(php_script_response);
@@ -316,6 +323,7 @@ $(document).ready(function() {
     }, 500)
 
 }        // load course info
+
     function addStudentClickInfo() {
         setTimeout(function () {
             $(".student").click(function () {
@@ -349,12 +357,47 @@ $(document).ready(function() {
         }, 500)
 
     }       // load student info
+
+    function addUserClickInfo() {
+        setTimeout(function () {
+            $(".single-user").click(function () {
+                clearSelected();
+                $(this).addClass('selected');
+                var userName = $(this).find('.users-name').text().replace(",","");
+                var userRole = $(this).find('.users-role').text();
+                var imgObject = $(this).find('.users-img').clone();
+                imgObject.attr('style','position: absolute;');
+                var phone = $(this).find('.users-phone').clone();
+                phone.attr('class',"users-phone users-phone-info offset-md-2 col-md-4 offset-3 col-6");
+                phone.attr('style',"font-size: 14px;");
+                var email = $(this).find('.users-email').clone();
+                email.attr('class',"users-email users-email-info offset-md-2 col-md-8 offset-3 col-6");
+                email.attr('style',"font-size: 14px;");
+                var IDelement = $(this).find('.users-ID').clone();
+                IDelement.attr('style','font-size: 14px;');
+                IDelement.attr('class','users-ID-info offset-3 col-2');
+                $('.info').load('htmls/user-info.html', function () {
+                    $(this).closest('.info-outer').find('.info-container').text('User info');
+                    $('.user-name-info').text(userName);
+                    $('.user-role-info').text(userRole);
+                    $('.user-img-info').append(imgObject);
+                    $('.user-description-info').append(phone);
+                    $('.user-description-info').append(IDelement);
+                    $('.user-description-info').append(email);
+                    deleteItem();
+                    showCancel();
+                    loadUpdateFormEvent();
+                });
+            });
+        }, 500)
+
+    }       // load user info
+
     function deleteItem() {
         $('.course-delete').click(function () {
             var name = $(this).closest('.info-con').find('h4').text();
             var table = $(this).attr('class').replace("-delete info-btn delete-btn","s");
             $.post('actions/delete.php',{ table: table, name: name } , function (data) {
-                console.log(data);
                 $('.selected').text(data);
                 $('.selected').fadeOut(1000);
             })
@@ -387,7 +430,6 @@ $(document).ready(function() {
                         data: dataToInsert,
                         type: 'post',
                         success: function (result) {
-                            console.log(result);
                             endOfEdit(result);
                         }
                     })
@@ -420,7 +462,42 @@ $(document).ready(function() {
                         data: dataToInsert,
                         type: 'post',
                         success: function (result) {
-                            console.log(result);
+                            endOfEdit(result);
+                        }
+                    })
+                }
+            } else if(string === "students") {
+                var name = $('#name').val();
+                var role = $('#role-input').val();
+                var phone = $('#phone').val();
+                var email = $('#email').val();
+                var image = $('#upload-result').attr('src');
+                if (name.length === 0 || phone.length === 0) {
+                    $('#upload-msg').text("Please fill all the fields");
+                    $('#upload-msg').css('color', 'red')
+                } else if(role === ""){
+                    $('#upload-msg').text("Please choose user role");
+                } else if(!/^(?:\+?\d{2}[ -]?\d{3}[ -]?\d{5}|\d{4})$/.test(phone)) {
+                    $('#upload-msg').text("Phone is incorrect");
+                } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+                    $('#upload-msg').text("E-mail is incorrect");
+                } else if (image.length === 0) {
+                    $('#upload-msg').text("Please upload your image");
+                    $('#upload-msg').css('color', 'yellow')
+                } else {
+                    var dataToInsert = {
+                        list: string,
+                        name: name,
+                        phone: phone,
+                        email: email,
+                        image: image,
+                        role: role
+                    };
+                    $.ajax({
+                        url: 'actions/insert.php', //targets the insert data file
+                        data: dataToInsert,
+                        type: 'post',
+                        success: function (result) {
                             endOfEdit(result);
                         }
                     })
@@ -434,18 +511,17 @@ $(document).ready(function() {
         $('.users').html("");
         var users;
         $.post('actions/getinfo.php', {list: 'administrator'}, function (data) {
-            console.log(data);
             users = JSON.parse(data);
             for (var i = 0; i < users.length; i++) {
                 var singleuser = "<li class='single-user' title='click for more details'>\n" +
                     "                            <span class='users-name col-3'>" + fLetterUpperCase(users[i]['name'])+","+ "</span>\n" +
-                    "                            <span class='users-role col-3'>" + users[i]['role'] + "</span>\n" +
+                    "                            <span class='users-role  offset-2 col-3'>" + users[i]['role'] + "</span>\n" +
                     "                            <img class='users-img col-4' src='" + users[i]['image'] + "'>\n" +
-                    "                            <div class='users-description col-8'><span class='users-phone'>" + users[i]['phone'] + "</span><span class='users-email'>" + users[i]['email'] + "</span></div>\n" +
+                    "                            <div class='users-description col-8'><span class='users-phone'>" + users[i]['phone'] + "</span><span class='users-ID' style='display: none'>" + users[i]['ID'] + "</span><span class='users-email'>" + users[i]['email'] + "</span></div>\n" +
                     "                    </li>";
                 $('.users').append(singleuser);
             }
-            $('.students-container').text("Students (" + users.length + ")");
+            $('.users-container').text("Students (" + users.length + ")");
 
 
         });
@@ -505,13 +581,21 @@ $(document).ready(function() {
                 var indx2 = img.indexOf(")")-1;
                 var src = img.substring(indx1,indx2);
                 var ID = $('.course-ID-info').text();
-            } else {
+            } else if (headline === 'students') {
                 $('.info').load('form/update-students.html');
                 var name = $('.student-name-info').text();
                 var phone = $('.student-phone-info').text();
                 var email = $('.student-email-info').text();
                 var src = $('.student-img-info').find('img').attr('src');
                 var ID = $('.student-ID-info').text();
+            } else if (headline === 'users') {
+                $('.info').load('form/update-user.html');
+                var name = $('.user-name-info').text();
+                var phone = $('.users-phone-info').text();
+                var email = $('.users-email-info').text();
+                var src = $('.user-img-info').find('img').attr('src');
+                var ID = $('.users-ID-info').text();
+                var role = $('.user-role-info').text();
             }
 
             setTimeout(function(){
@@ -527,6 +611,7 @@ $(document).ready(function() {
                     $('#description').val(description);
                     $('#upload-result').attr('src',src);
                     $('#ID').val(ID);
+                    $('#role-input').val(role);
                 });
                 updateItem(headline);
                 getCheckboxs();
@@ -544,7 +629,6 @@ $(document).ready(function() {
                     $('.lists-title').text("No courses found.");
                 } else {
                     courses = JSON.parse(data);
-                    console.log(courses);
                 for( i=0 ; i<courses.length ; i++ ) {
                     var item = '<div id="lists" class="wrapper">\n' +
                         '    <h1 class="title"></h1>\n' +
@@ -598,7 +682,6 @@ $(document).ready(function() {
                         data: dataToInsert,
                         type: 'post',
                         success: function (result) {
-                            console.log(result);
                             endOfEdit(string);
                         }
                     })
@@ -639,9 +722,46 @@ $(document).ready(function() {
                         data: dataToInsert,
                         type: 'post',
                         success: function (result) {
-                            console.log(result);
-
                             endOfEdit(result);
+                        }
+                    })
+                }
+            } else if(string === "users") {
+                var ID = $('#ID').val();
+                var name = $('#name').val();
+                var phone = $('#phone').val();
+                var email = $('#email').val();
+                var image = $('#upload-result').attr('src');
+                var role = $('#role-input').val();
+
+                if (name.length === 0 || phone.length === 0) {
+                    $('#upload-msg').text("Please fill all the fields");
+                    $('#upload-msg').css('color', 'red')
+                } else if(!/^(?:\+?\d{2}[ -]?\d{3}[ -]?\d{5}|\d{4})$/.test(phone)) {
+                    $('#upload-msg').text("Phone is incorrect");
+                } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+                    $('#upload-msg').text("E-mail is incorrect");
+                } else if (image.length === 0) {
+                    $('#upload-msg').text("Please upload your image");
+                    $('#upload-msg').css('color', 'yellow')
+                } else {
+                    var dataToInsert = {
+                        ID: ID,
+                        list: string,
+                        name: fLetterUpperCase(name),
+                        phone: phone,
+                        email: email,
+                        image: image,
+                        role: role
+                    };
+                    $.ajax({
+                        url: 'actions/update.php', //targets the insert data file
+                        data: dataToInsert,
+                        type: 'post',
+                        success: function (result) {
+                            console.log(result);
+                            endOfEdit(result);
+                            getUsers();
                         }
                     })
                 }
@@ -666,8 +786,6 @@ $(document).ready(function() {
                     } else {
                         assigned = JSON.parse(data);
                     }
-                    console.log(allCourses);
-                    console.log(assigned);
                     for( i=0 ; i<allCourses.length ; i++ ){
                         for( z=0 ; z<assigned.length ; z++ ) {
                             if( allCourses[i]['ID'] == assigned[z]['ID'] ) {

@@ -5,7 +5,7 @@
  * Date: 31/08/2017
  * Time: 02:42
  */
-session_start();
+
 class Actions extends SchoolDb
 {
     public $data;
@@ -52,11 +52,31 @@ class Actions extends SchoolDb
         }
     }
     protected function insertStudent($name, $phone, $email, $image, $table) { //insert new student
-        if ($table === 'administrator') {
-            $data = 'NOT ALLOWED';
-            return $data;
+    if ($table === 'administrator') {
+        $data = 'NOT ALLOWED';
+        return $data;
+    }
+    $sql = "INSERT INTO $table (`ID`, `name`, `phone`, `email`, `image`) VALUES (NULL, '$name', '$phone', '$email', '$image')";
+    $rows_affected = $this->connect()->query($sql);
+    if(($rows_affected)) {
+        echo "Success,";
+        echo " ".$rows_affected." Student added.";
+    } else {
+        echo "Can't add a ". mysqli_error($this->connect())."";
+        print_r($this->connect());
+    }
+}
+    protected function insertUser($name, $phone, $email, $image, $table, $role) { //insert new user
+        $table === 'administrator';
+
+        $sq = "SELECT * FROM $table WHERE `role` = 'owner'";
+        $result = $this->connect()->query($sq);
+        if($result->num_rows > 0) {
+            echo "Only 1 Owner is allowed";
+            exit();
         }
-        $sql = "INSERT INTO $table (`ID`, `name`, `phone`, `email`, `image`) VALUES (NULL, '$name', '$phone', '$email', '$image')";
+
+        $sql = "INSERT INTO $table (`ID`, `name`, `phone`, `email`, `image`, `role`) VALUES (NULL, '$name', '$phone', '$email', '$image', '$role')";
         $rows_affected = $this->connect()->query($sql);
         if(($rows_affected)) {
             echo "Success,";
@@ -104,6 +124,25 @@ class Actions extends SchoolDb
 		}
 	}
 
+    protected function update_User($ID, $name, $phone, $email, $image, $table, $role)
+    { //update a admin user
+        $table = 'administrator';
+
+        $sq = "SELECT * FROM $table WHERE `role` = 'owner'";
+        $result = $this->connect()->query($sq);
+        if($result->num_rows > 0) {
+            echo "Only 1 Owner is allowed";
+            exit();
+        }
+        $sql = "UPDATE $table SET `name`='$name', `phone`='$phone', `email`='$email', `image`='$image', `role`='$role' WHERE `$table`.`ID`='$ID';";
+        $rows_affected = $this->connect()->query($sql);
+        if (($rows_affected)) {
+            echo "Success,";
+            echo " " . $rows_affected . " User updated.";
+        } else {
+            echo ($sql) ;
+        }
+    }
     protected function RemoveItem($table, $name) {  //deletes row from DB
         $sql = "DELETE FROM `$table` WHERE `$table`.`name` = '$name'";
         $result = $this->connect()->query($sql);

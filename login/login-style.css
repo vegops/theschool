@@ -9,6 +9,8 @@ body {
     width: 100%;
     font-family: "Lato";
     overflow-x: hidden;
+    background: url(../images/wall.jpg) center bottom #1CB0EC;
+    background-size: 100%;
 }
 .preload * {
     -webkit-transition: none !important;
@@ -24,7 +26,6 @@ body {
 }
 #hero {
     height: 350px;
-    background: #1CB0EC;
     position: relative;
     overflow: hidden;
 }
@@ -121,9 +122,16 @@ body {
 form {
     position: relative;
     width: 400px;
-    height: 280px;
+    height: 240px;
     margin: 0 auto;
     z-index: 999999999;
+    padding-top: 20px;
+    background: url(http://thepatternlibrary.com/img/h.jpg) black;
+    border: 10px inset #bf824f;
+    border-bottom: 0;
+    border-top-left-radius: 40px;
+    border-top-right-radius: 40px;
+    box-shadow: 0 0 40px 10px #0f0f0f;
 }
 form .input_holder {
     position: relative;
@@ -174,8 +182,13 @@ form .submit_button {
     position: relative;
     margin-left: 50px;
     cursor: pointer;
-    background: #1CB0EC;
-    border-bottom: 4px solid #1091c5;
+    background: url(http://thepatternlibrary.com/img/h.jpg) aliceblue;
+    border-bottom: 4px solid #ed1c24;
+    transition: 500ms ease;
+}
+form .submit_button:hover {
+    background: #ed1c24;
+    box-shadow: 0 0 30px 2px yellow;
 }
 form .submit_button:active {
     outline: 0;
@@ -231,4 +244,16 @@ form .submit_button:active {
     width: 80%;
     margin: 20px auto 20px 50px;
     text-align: center;
+}
+@media only screen and (max-width: 500px) {
+    body {
+        background-color: lightgreen !important;
+    }
+    #hero h1 {
+        font-size: 60px;
+    }
+    form {
+        border: 10px inset #bf824f !important;
+        border-radius: 40px !important;
+    }
 }

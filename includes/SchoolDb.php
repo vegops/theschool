@@ -18,7 +18,7 @@ class SchoolDb
     {
         $this->servername = 'localhost';
         $this->username = 'root';
-        $this->password = 'root';
+        $this->password = '';
         $this->database = 'the_school';
 
         $connection = new mysqli(

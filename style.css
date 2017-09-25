@@ -147,6 +147,7 @@ div#user-popup {
     border: 10px groove #D77400;
     text-align: center;
     transition: 300ms ease;
+    width: 90%;
 }
 .inner-container .column {
     display: inline-block;
@@ -241,10 +242,14 @@ p.course-description {
 h6.course-ID-info {
     line-height: inherit;
 }
-h6.course-ID-info::before, .student-ID-info::before {
+h6.course-ID-info::before,
+.student-ID-info::before,
+.users-ID-info::before{
     content: "(";
 }
-h6.course-ID-info::after, .student-ID-info::after {
+h6.course-ID-info::after,
+.student-ID-info::after,
+.users-ID-info::after{
     content: ")";
 }
 
@@ -252,13 +257,17 @@ div.student-description, div.users-description {
     text-align: left;
     font-size: 0.5em;
 }
-div.student-description .student-phone:before, div.users-description .users-phone:before {
+div.student-description .student-phone:before,
+div.users-description .users-phone:before
+{
     content: "Phone: ";
 }
-div.student-description .student-email, div.users-description .users-email {
+div.student-description .student-email,
+div.users-description .users-email {
     display: block;
 }
-div.student-description .student-email:before, div.users-description .users-email:before  {
+div.student-description .student-email:before,
+div.users-description .users-email:before  {
     content: "Email: ";
 }
 .add-btn {

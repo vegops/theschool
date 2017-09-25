@@ -26,6 +26,12 @@ if ($_FILES["file"]["size"] > 500000) {
     echo "Sorry, Photo has to be less then 500kb.";
     $uploadOk = 0;
 }
+// check image dimentions
+list($width, $height, $type, $attr) = getimagesize($_FILES["file"]["tmp_name"]);
+if ( $width > 350 || $height > 350 ){
+    echo "Sorry, Photo dimensions should be upto 350px (width & height)";
+    $uploadOk = 0;
+}
 // Allow certain file formats
 if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
     && $imageFileType != "gif" ) {

@@ -21,6 +21,9 @@ class Application extends Actions
     public function SubmitStudent($name, $phone, $email, $image, $table) { //calls insert function
         return ($this->insertStudent($name, $phone, $email, $image, $table));
     }
+    public function SubmitUser($name, $phone, $email, $image, $table, $role) { //calls insert function
+        return ($this->insertUser($name, $phone, $email, $image, $table, $role));
+    }
     public function DeleteItem($table, $name){ //calls delete item function
         return $this->RemoveItem($table, $name);
     }
@@ -30,6 +33,9 @@ class Application extends Actions
 	public function UpdateStudent($ID, $name, $phone, $email, $image, $table, $courses) { //calls insert function
 		return ($this->update_Student($ID, $name, $phone, $email, $image, $table, $courses));
 	}
+    public function UpdateUser($ID, $name, $phone, $email, $image, $table, $role) { //calls insert function
+        return ($this->update_User($ID, $name, $phone, $email, $image, $table, $role));
+    }
     public function ShowAssigned($ID){
         return $this->GetAssigned($ID);
     }
