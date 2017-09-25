@@ -80,7 +80,7 @@ div#user-popup {
 .user-details {
     padding: 30px;
 }
-#user-popup .close, #user-popup .edit {
+#user-popup .close, #user-popup #edit-popup {
     position: absolute;
     right: 0;
     transition: 400ms ease;
@@ -88,7 +88,7 @@ div#user-popup {
     z-index: 2;
     font-size: 35px;
 }
-#user-popup .edit {
+#user-popup #edit-popup {
     bottom: 0;
     color: #000;
     text-shadow: 0 1px 0 #fff;
@@ -148,6 +148,7 @@ div#user-popup {
     text-align: center;
     transition: 300ms ease;
     width: 90%;
+    max-width: 1200px;
 }
 .inner-container .column {
     display: inline-block;

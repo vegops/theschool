@@ -15,6 +15,7 @@ $(document).ready(function() {
             $('#pop-user-role').text(user['role']);
             $('#pop-user-phone').text(user['phone']);
             $('#pop-user-email').text(user['email']);
+            $('#pop-user-ID').text(user['ID']);
             $('#pop-user-img').attr('src', user['image']);
             switch (user['role']) {
                 case 'owner':
@@ -62,6 +63,9 @@ $(document).ready(function() {
                     headline = fLetterUpperCase(headline);
                     $('.info-container').text('Add to ' + headline);
                     showCancel();
+                    $('#role-input').click(function () {
+                        $(this).val("");
+                    });
                 })
             }, 300);
 
@@ -225,6 +229,7 @@ $(document).ready(function() {
         $('#popup-layover').slideDown();
         $('#navbar').toggleClass('blur');
         $('.container').toggleClass('blur');
+        loadUpdateFormEvent();
     });
     $('.close').click(function () {
         $('#popup-layover').slideUp();
@@ -521,8 +526,8 @@ $(document).ready(function() {
                     "                    </li>";
                 $('.users').append(singleuser);
             }
-            $('.users-container').text("Students (" + users.length + ")");
-
+            $('.users-container').text("Users (" + users.length + ")");
+            addUserClickInfo();
 
         });
     }                  // load users list
@@ -596,7 +601,21 @@ $(document).ready(function() {
                 var src = $('.user-img-info').find('img').attr('src');
                 var ID = $('.users-ID-info').text();
                 var role = $('.user-role-info').text();
+            } else if (headline === 'selfs') {
+            $('.info').load('form/update-user.html');
+                $('#popup-layover').slideUp();
+                $('#navbar').toggleClass('blur');
+                $('.container').toggleClass('blur');
+
+                var name = $('#pop-user-name').text();
+                var phone = $('#pop-user-phone').text();
+                var email = $('#pop-user-email').text();
+                var src = $('#pop-user-img').attr('src');
+                var ID = $('#pop-user-ID').text();
+                var role = $('#pop-user-role').text();
+                headline = 'users';
             }
+
 
             setTimeout(function(){
                 $('.form-container').ready(function () {
@@ -612,6 +631,9 @@ $(document).ready(function() {
                     $('#upload-result').attr('src',src);
                     $('#ID').val(ID);
                     $('#role-input').val(role);
+                    $('#role-input').click(function () {
+                        $(this).val("");
+                    });
                 });
                 updateItem(headline);
                 getCheckboxs();
@@ -759,9 +781,19 @@ $(document).ready(function() {
                         data: dataToInsert,
                         type: 'post',
                         success: function (result) {
-                            console.log(result);
-                            endOfEdit(result);
-                            getUsers();
+                            if(result == "Only 1 Owner is allowed") {
+                                $('.form-container').html("Sorry, Only 1 owner is allowed.");
+                                console.log(result);
+                                setTimeout(function () {
+                                    reloadData();
+                                    loadCounters();
+                                    getUsers();
+                                },1500);
+                            } else {
+                                console.log(result);
+                                endOfEdit(result);
+                                getUsers();
+                            }
                         }
                     })
                 }
@@ -836,6 +868,10 @@ $(document).ready(function() {
         setTimeout(function () {
             elemtnt.toggleClass('flip90');
         },300)
+
+    }
+    function popUpEdit() {
+        $
 
     }
 });

@@ -11,11 +11,11 @@ class Actions extends SchoolDb
     public $data;
 
     protected function LogIn($email){
-        $query = "SELECT * FROM administrator WHERE email ='".$email."'";
+        $query = "SELECT * FROM `administrator` WHERE email ='$email'";
         $result = $this->connect()->query($query);
         $user = $result->fetch_assoc();
 
-        return $user;
+	    return $user;
     }
 
     protected function getAllInfo($table) { //pulls info all from table
@@ -125,14 +125,14 @@ class Actions extends SchoolDb
 	}
 
     protected function update_User($ID, $name, $phone, $email, $image, $table, $role)
-    { //update a admin user
+    { //update an admin user
         $table = 'administrator';
 
-        $sq = "SELECT * FROM $table WHERE `role` = 'owner'";
+        $sq = "SELECT * FROM `$table` WHERE `role` = 'owner'";
         $result = $this->connect()->query($sq);
-        if($result->num_rows > 0) {
-            echo "Only 1 Owner is allowed";
-            exit();
+        if($result->num_rows > 0 && $role == "Owner") {
+	        echo "Only 1 Owner is allowed";
+	        exit();
         }
         $sql = "UPDATE $table SET `name`='$name', `phone`='$phone', `email`='$email', `image`='$image', `role`='$role' WHERE `$table`.`ID`='$ID';";
         $rows_affected = $this->connect()->query($sql);
@@ -140,7 +140,7 @@ class Actions extends SchoolDb
             echo "Success,";
             echo " " . $rows_affected . " User updated.";
         } else {
-            echo ($sql) ;
+            echo "error" ;
         }
     }
     protected function RemoveItem($table, $name) {  //deletes row from DB
