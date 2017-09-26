@@ -38,44 +38,33 @@ $(document).ready(function() {
         }
     });
 
+
     loadCounters();
     getCourses();
     getStudents();
     addCourseClickInfo();
     addStudentClickInfo();
-
-    // load form
-    function additemBtn() {
-        $('.add-btn').click(function () {
-            clearSelected();
-            var headline = $(this).parent().find('ul').attr('class').replace('list', '').trim();
-            if (headline === 'courses') {
-                $('.info').load('form/form-courses.html');
-            } else if (headline === 'students') {
-                $('.info').load('form/form-students.html');
-            } else if (headline === 'users') {
-                $('.info').load('form/form-users.html');
-            }
-            setTimeout(function () {
-                $('.form-container').ready(function () {
-                    fileUpload();
-                    insertNew(headline);
-                    headline = fLetterUpperCase(headline);
-                    $('.info-container').text('Add to ' + headline);
-                    showCancel();
-                    $('#role-input').click(function () {
-                        $(this).val("");
-                    });
-                })
-            }, 300);
-
-        });
-    };
     additemBtn();
 
 
 
-    //return to school view
+    var c = document.getElementById("close-Canvas");
+    var ctx = c.getContext("2d");
+    ctx.fillStyle = "#D77400";
+    ctx.moveTo(0,0);
+    ctx.lineTo(100,100);
+    ctx.lineTo(100,0);
+    ctx.fill();
+
+    var c = document.getElementById("edit-Canvas");
+    var ctx = c.getContext("2d");
+    ctx.fillStyle = "#D77400";
+    ctx.moveTo(0,100);
+    ctx.lineTo(100,100);
+    ctx.lineTo(100,0);
+    ctx.fill();
+
+    // user action events
     $('.school').click(function () {
         if( $('#none').hasClass('admin-view') ) {
             setTimeout(function () {
@@ -86,9 +75,7 @@ $(document).ready(function() {
             },200);
             flip($('#none'));
         }
-    });
-
-    //load admin panel
+    });     //return to school view
     setTimeout(function () {
         $("#administrator-btn").click(function (e) {
             if($('#left-section').hasClass('school-view')) {
@@ -214,121 +201,324 @@ $(document).ready(function() {
                 }
             }
         });
-    },200);
-
-    // cancel form and return to main
+    },200);      //load admin panel
     $('#cancel').click(function () {
         loadCounters();
         reloadData();
         $(this).attr('class','');
         $(this).parent().find('label').text('info');
-    });
+    });   //cancel form on 'box' and return to main
 
-    //
+    //pop up
     $('.user-name').click(function () {
         $('#popup-layover').slideDown();
         $('#navbar').toggleClass('blur');
         $('.container').toggleClass('blur');
         loadUpdateFormEvent();
-    });
+    });   //Shows the popup
     $('.close').click(function () {
         $('#popup-layover').slideUp();
         $('#navbar').toggleClass('blur');
         $('.container').toggleClass('blur');
-    });
-
-    var c = document.getElementById("close-Canvas");
-    var ctx = c.getContext("2d");
-    ctx.fillStyle = "#D77400";
-    ctx.moveTo(0,0);
-    ctx.lineTo(100,100);
-    ctx.lineTo(100,0);
-    ctx.fill();
-
-    var c = document.getElementById("edit-Canvas");
-    var ctx = c.getContext("2d");
-    ctx.fillStyle = "#D77400";
-    ctx.moveTo(0,100);
-    ctx.lineTo(100,100);
-    ctx.lineTo(100,0);
-    ctx.fill();
+    });       //hides popup
 
 
-
-    // all functions
+    //// all functions //
+    // DOM actions
     function fLetterUpperCase(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }    // first letter upper-case
-    function reloadData() {
-        getCourses();
-        getStudents();
-        addCourseClickInfo();
-        addStudentClickInfo();
-        $('.info-container').text('info');
-        $('#cancel').addClass('none');
-
-    }                // reloads all data
     function clearSelected() {
         $( ".selected" ).removeClass( "selected" );
     }             // clears selected items on li
     function showCancel() {
         $('#cancel').attr('class','fa fa-times-circle');
     }                // displays the cancel btn
-    function fileUpload() {
-        $('#fileToUpload').change(function() {
-            $('#upload').css({'color':'#5cb85c','transform':'rotate(360deg)'});
-            $('#upload').val('click to upload');
-        });
-        $('#upload').click(function() {
-            var file_data = $('#fileToUpload').prop('files')[0];
-            var form_data = new FormData();
-            form_data.append('file', file_data);
-            $.ajax({
-                url: 'uploads/uploads.php', // point to server-side PHP script
-                dataType: 'text',
-                cache: false,
-                contentType: false,
-                processData: false,
-                data: form_data,
-                type: 'post',
-                success: function(php_script_response){
-                    if(php_script_response.charAt(0)==='S'){
-                        $('#upload-msg').text(php_script_response);
+    function flip(elemtnt) {
+        elemtnt.toggleClass('flip90');
+        setTimeout(function () {
+            elemtnt.toggleClass('flip90');
+        },300)
+
+}               // flip effect
+    function endOfEdit(string) {
+        var box = $('#info-box');
+        setTimeout(function () {
+            $('#info-box').addClass('flip');
+            box.html("<img src='images/success.png' width='60%'><div></div>");
+            // box.find('div').text(string);
+        },500);
+        setTimeout(function () {
+            reloadData();
+            loadCounters();
+            box.removeClass('flip');
+        },2000);
+    }           // flips back to counters and reloads data
+
+    //user actions
+    function insertNew(string) {
+        $('#insert-'+string).on('click', function () {
+            setTimeout(function () {
+                $('#upload-msg').text("");
+                if(string === "courses") {
+                    var name = $('#name').val();
+                    var description = $('#description').val();
+                    var image = $('#upload-result').attr('src');
+                    if (name.length === 0 || description.length === 0) {
+                        $('#upload-msg').text("Please fill all the fields");
+                        $('#upload-msg').css('color', 'red')
+                    } else if (image.length === 0) {
+                        $('#upload-msg').text("Please upload your image");
+                        $('#upload-msg').css('color', 'yellow')
                     } else {
-                        var response = JSON.parse(php_script_response);
-                        $('#upload-msg').text("");
-                        $('#upload-result').attr('src', response[1]);
-                        $('#upload').addClass(" uploaded");
-                        $('#upload').val('Uploaded!');
+                        var dataToInsert = {
+                            list: string,
+                            name: name,
+                            description: description,
+                            image: image
+                        };
+                        $.ajax({
+                            url: 'actions/insert.php', //targets the insert data file
+                            data: dataToInsert,
+                            type: 'post',
+                            success: function (result) {
+                                endOfEdit(result);
+                            }
+                        })
+                    }
+                } else if(string === "students") {
+                    var name = $('#name').val();
+                    var phone = $('#phone').val();
+                    var email = $('#email').val();
+                    var image = $('#upload-result').attr('src');
+                    if (name.length === 0 || phone.length === 0) {
+                        $('#upload-msg').text("Please fill all the fields");
+                        $('#upload-msg').css('color', 'red')
+                    } else if(!/^(?:\+?\d{2}[ -]?\d{3}[ -]?\d{5}|\d{4})$/.test(phone)) {
+                        $('#upload-msg').text("Phone is incorrect");
+                    } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+                        $('#upload-msg').text("E-mail is incorrect");
+                    } else if (image.length === 0) {
+                        $('#upload-msg').text("Please upload your image");
+                        $('#upload-msg').css('color', 'yellow')
+                    } else {
+                        var dataToInsert = {
+                            list: string,
+                            name: name,
+                            phone: phone,
+                            email: email,
+                            image: image
+                        };
+                        $.ajax({
+                            url: 'actions/insert.php', //targets the insert data file
+                            data: dataToInsert,
+                            type: 'post',
+                            success: function (result) {
+                                endOfEdit(result);
+                            }
+                        })
+                    }
+                } else if(string === "users") {
+                    var name = $('#name').val();
+                    var role = $('#role-input').val();
+                    var phone = $('#phone').val();
+                    var email = $('#email').val();
+                    var image = $('#upload-result').attr('src');
+                    if (name.length === 0 || phone.length === 0) {
+                        $('#upload-msg').text("Please fill all the fields");
+                        $('#upload-msg').css('color', 'red')
+                    } else if(role === ""){
+                        $('#upload-msg').text("Please choose user role");
+                    } else if(!/^(?:\+?\d{2}[ -]?\d{3}[ -]?\d{5}|\d{4})$/.test(phone)) {
+                        $('#upload-msg').text("Phone is incorrect");
+                    } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+                        $('#upload-msg').text("E-mail is incorrect");
+                    } else if (image.length === 0) {
+                        $('#upload-msg').text("Please upload your image");
+                        $('#upload-msg').css('color', 'yellow')
+                    } else {
+                        var dataToInsert = {
+                            list: string,
+                            name: name,
+                            phone: phone,
+                            email: email,
+                            image: image,
+                            role: role
+                        };
+                        $.ajax({
+                            url: 'actions/insert.php', //targets the insert data file
+                            data: dataToInsert,
+                            type: 'post',
+                            success: function (result) {
+                                endOfEdit(result);
+                            }
+                        })
                     }
                 }
-            });
+            },1000);
         });
-    }                // file upload
+
+    }           // adds new item
+    function updateItem(string) {
+        $('#update-'+string).on('click', function () {
+            $('#upload-msg').text("");
+            if(string === "courses") {
+                var name = $('#name').val();
+                var description = $('#description').val();
+                var image = $('#upload-result').attr('src');
+                var ID = $('#ID').val();
+                if (name.length === 0 || description.length === 0) {
+                    $('#upload-msg').text("Please fill all the fields");
+                    $('#upload-msg').css('color', 'red')
+                } else if (image.length === 0) {
+                    $('#upload-msg').text("Please upload your image");
+                    $('#upload-msg').css('color', 'yellow')
+                } else {
+                    var dataToInsert = {
+                        ID: ID,
+                        list: string,
+                        name: fLetterUpperCase(name),
+                        description: description,
+                        image: image
+                    };
+                    $.ajax({
+                        url: 'actions/update.php', //targets the insert data file
+                        data: dataToInsert,
+                        type: 'post',
+                        success: function (result) {
+                            endOfEdit(string);
+                        }
+                    })
+                }
+            } else if(string === "students") {
+                var ID = $('#ID').val();
+                var name = $('#name').val();
+                var phone = $('#phone').val();
+                var email = $('#email').val();
+                var image = $('#upload-result').attr('src');
+                var courses = [];
+                for( i=0 ; i<$('input:checked').length ; i++ ){
+                    courses.push($('input:checked')[i].id);
+                }
+
+                if (name.length === 0 || phone.length === 0) {
+                    $('#upload-msg').text("Please fill all the fields");
+                    $('#upload-msg').css('color', 'red')
+                } else if(!/^(?:\+?\d{2}[ -]?\d{3}[ -]?\d{5}|\d{4})$/.test(phone)) {
+                    $('#upload-msg').text("Phone is incorrect");
+                } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+                    $('#upload-msg').text("E-mail is incorrect");
+                } else if (image.length === 0) {
+                    $('#upload-msg').text("Please upload your image");
+                    $('#upload-msg').css('color', 'yellow')
+                } else {
+                    var dataToInsert = {
+                        ID: ID,
+                        list: string,
+                        name: fLetterUpperCase(name),
+                        phone: phone,
+                        email: email,
+                        image: image,
+                        courses: (courses)
+                    };
+                    $.ajax({
+                        url: 'actions/update.php', //targets the insert data file
+                        data: dataToInsert,
+                        type: 'post',
+                        success: function (result) {
+                            endOfEdit(result);
+                        }
+                    })
+                }
+            } else if(string === "users") {
+                var ID = $('#ID').val();
+                var name = $('#name').val();
+                var phone = $('#phone').val();
+                var email = $('#email').val();
+                var image = $('#upload-result').attr('src');
+                var role = $('#role-input').val();
+
+                if (name.length === 0 || phone.length === 0) {
+                    $('#upload-msg').text("Please fill all the fields");
+                    $('#upload-msg').css('color', 'red')
+                } else if(!/^(?:\+?\d{2}[ -]?\d{3}[ -]?\d{5}|\d{4})$/.test(phone)) {
+                    $('#upload-msg').text("Phone is incorrect");
+                } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+                    $('#upload-msg').text("E-mail is incorrect");
+                } else if (image.length === 0) {
+                    $('#upload-msg').text("Please upload your image");
+                    $('#upload-msg').css('color', 'yellow')
+                } else {
+                    var dataToInsert = {
+                        ID: ID,
+                        list: string,
+                        name: fLetterUpperCase(name),
+                        phone: phone,
+                        email: email,
+                        image: image,
+                        role: role
+                    };
+                    $.ajax({
+                        url: 'actions/update.php', //targets the insert data file
+                        data: dataToInsert,
+                        type: 'post',
+                        success: function (result) {
+                            if(result == "Only 1 Owner is allowed") {
+                                $('.form-container').html("Sorry, Only 1 owner is allowed.");
+                                console.log(result);
+                                setTimeout(function () {
+                                    reloadData();
+                                    loadCounters();
+                                    getUsers();
+                                },1500);
+                            } else {
+                                console.log(result);
+                                endOfEdit(result);
+                                getUsers();
+                            }
+                        }
+                    })
+                }
+            }
+        });
+
+    }          //update item
+    function deleteItem() {
+        $('.course-delete').click(function () {
+            var name = $(this).closest('.info-con').find('h4').text();
+            var table = $(this).attr('class').replace("-delete info-btn delete-btn","s");
+            $.post('actions/delete.php',{ table: table, name: name } , function (data) {
+                $('.selected').text(data);
+                $('.selected').fadeOut(1000);
+            })
+            endOfEdit('Deleted');
+        })
+    }                // delete item
+
+    // loading data
     function addCourseClickInfo() {
-    setTimeout(function () {
-        $(".course").click(function () {
-            clearSelected();
-            $(this).addClass('selected');
-            var courseName = $(this).find('.course-name').text();
-            var imgObject = $(this).find('.course-img').clone();
-            var description = $(this).find('p').text();
-            var ID = $(this).find('.course-ID').text();
-            $('.info').load('htmls/course-info.html', function () {
-                $(this).closest('.info-outer').find('.info-container').text('Course info');
-                $('.course-name-info').text(courseName);
-                $('.course-ID-info').text(ID);
-                $('.course-img-info').append(imgObject);
-                $('.course-description-info').text(description);
-                deleteItem();
-                showCancel();
-                loadUpdateFormEvent()
+        setTimeout(function () {
+            $(".course").click(function () {
+                clearSelected();
+                $(this).addClass('selected');
+                var courseName = $(this).find('.course-name').text();
+                var imgObject = $(this).find('.course-img').clone();
+                var description = $(this).find('p').text();
+                var ID = $(this).find('.course-ID').text();
+                $('.info').load('htmls/course-info.html', function () {
+                    $(this).closest('.info-outer').find('.info-container').text('Course info');
+                    $('.course-name-info').text(courseName);
+                    $('.course-ID-info').text(ID);
+                    $('.course-img-info').append(imgObject);
+                    $('.course-description-info').text(description);
+                    deleteItem();
+                    showCancel();
+                    loadUpdateFormEvent()
+                });
             });
-        });
-    }, 500)
+        }, 500)
 
-}        // load course info
-
+    }        // load course info
     function addStudentClickInfo() {
         setTimeout(function () {
             $(".student").click(function () {
@@ -362,7 +552,6 @@ $(document).ready(function() {
         }, 500)
 
     }       // load student info
-
     function addUserClickInfo() {
         setTimeout(function () {
             $(".single-user").click(function () {
@@ -396,122 +585,39 @@ $(document).ready(function() {
             });
         }, 500)
 
-    }       // load user info
+    }          // load user info
 
-    function deleteItem() {
-        $('.course-delete').click(function () {
-            var name = $(this).closest('.info-con').find('h4').text();
-            var table = $(this).attr('class').replace("-delete info-btn delete-btn","s");
-            $.post('actions/delete.php',{ table: table, name: name } , function (data) {
-                $('.selected').text(data);
-                $('.selected').fadeOut(1000);
-            })
-            endOfEdit('Deleted');
-        })
-    }                // delete item
-    function insertNew(string) {
-        $('#insert-'+string).on('click', function () {
-            setTimeout(function () {
-            $('#upload-msg').text("");
-            if(string === "courses") {
-                var name = $('#name').val();
-                var description = $('#description').val();
-                var image = $('#upload-result').attr('src');
-                if (name.length === 0 || description.length === 0) {
-                    $('#upload-msg').text("Please fill all the fields");
-                    $('#upload-msg').css('color', 'red')
-                } else if (image.length === 0) {
-                    $('#upload-msg').text("Please upload your image");
-                    $('#upload-msg').css('color', 'yellow')
-                } else {
-                    var dataToInsert = {
-                        list: string,
-                        name: name,
-                        description: description,
-                        image: image
-                    };
-                    $.ajax({
-                        url: 'actions/insert.php', //targets the insert data file
-                        data: dataToInsert,
-                        type: 'post',
-                        success: function (result) {
-                            endOfEdit(result);
-                        }
-                    })
-                }
-            } else if(string === "students") {
-                var name = $('#name').val();
-                var phone = $('#phone').val();
-                var email = $('#email').val();
-                var image = $('#upload-result').attr('src');
-                if (name.length === 0 || phone.length === 0) {
-                    $('#upload-msg').text("Please fill all the fields");
-                    $('#upload-msg').css('color', 'red')
-                } else if(!/^(?:\+?\d{2}[ -]?\d{3}[ -]?\d{5}|\d{4})$/.test(phone)) {
-                    $('#upload-msg').text("Phone is incorrect");
-                } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
-                    $('#upload-msg').text("E-mail is incorrect");
-                } else if (image.length === 0) {
-                    $('#upload-msg').text("Please upload your image");
-                    $('#upload-msg').css('color', 'yellow')
-                } else {
-                    var dataToInsert = {
-                        list: string,
-                        name: name,
-                        phone: phone,
-                        email: email,
-                        image: image
-                    };
-                    $.ajax({
-                        url: 'actions/insert.php', //targets the insert data file
-                        data: dataToInsert,
-                        type: 'post',
-                        success: function (result) {
-                            endOfEdit(result);
-                        }
-                    })
-                }
-            } else if(string === "students") {
-                var name = $('#name').val();
-                var role = $('#role-input').val();
-                var phone = $('#phone').val();
-                var email = $('#email').val();
-                var image = $('#upload-result').attr('src');
-                if (name.length === 0 || phone.length === 0) {
-                    $('#upload-msg').text("Please fill all the fields");
-                    $('#upload-msg').css('color', 'red')
-                } else if(role === ""){
-                    $('#upload-msg').text("Please choose user role");
-                } else if(!/^(?:\+?\d{2}[ -]?\d{3}[ -]?\d{5}|\d{4})$/.test(phone)) {
-                    $('#upload-msg').text("Phone is incorrect");
-                } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
-                    $('#upload-msg').text("E-mail is incorrect");
-                } else if (image.length === 0) {
-                    $('#upload-msg').text("Please upload your image");
-                    $('#upload-msg').css('color', 'yellow')
-                } else {
-                    var dataToInsert = {
-                        list: string,
-                        name: name,
-                        phone: phone,
-                        email: email,
-                        image: image,
-                        role: role
-                    };
-                    $.ajax({
-                        url: 'actions/insert.php', //targets the insert data file
-                        data: dataToInsert,
-                        type: 'post',
-                        success: function (result) {
-                            endOfEdit(result);
-                        }
-                    })
-                }
-            }
-            },1000);
+    function fileUpload() {
+        $('#fileToUpload').change(function() {
+            $('#upload').css({'color':'#5cb85c','transform':'rotate(360deg)'});
+            $('#upload').val('click to upload');
         });
-
-    }           // adds new item
+        $('#upload').click(function() {
+            var file_data = $('#fileToUpload').prop('files')[0];
+            var form_data = new FormData();
+            form_data.append('file', file_data);
+            $.ajax({
+                url: 'uploads/uploads.php', // point to server-side PHP script
+                dataType: 'text',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: form_data,
+                type: 'post',
+                success: function(php_script_response){
+                    if(php_script_response.charAt(0)==='S'){
+                        $('#upload-msg').text(php_script_response);
+                    } else {
+                        var response = JSON.parse(php_script_response);
+                        $('#upload-msg').text("");
+                        $('#upload-result').attr('src', response[1]);
+                        $('#upload').addClass(" uploaded");
+                        $('#upload').val('Uploaded!');
+                    }
+                }
+            });
+        });
+    }                // file upload
     function getUsers() {
         $('.users').html("");
         var users;
@@ -640,7 +746,33 @@ $(document).ready(function() {
             }, 300);
 
         })
-    } // loads the update on click with item values
+    }       // loads the update onClick event with item values
+    function additemBtn() {
+        $('.add-btn').click(function () {
+            clearSelected();
+            var headline = $(this).parent().find('ul').attr('class').replace('list', '').trim();
+            if (headline === 'courses') {
+                $('.info').load('form/form-courses.html');
+            } else if (headline === 'students') {
+                $('.info').load('form/form-students.html');
+            } else if (headline === 'users') {
+                $('.info').load('form/form-users.html');
+            }
+            setTimeout(function () {
+                $('.form-container').ready(function () {
+                    fileUpload();
+                    insertNew(headline);
+                    headline = fLetterUpperCase(headline);
+                    $('.info-container').text('Add to ' + headline);
+                    showCancel();
+                    $('#role-input').click(function () {
+                        $(this).val("");
+                    });
+                })
+            }, 300);
+
+        });
+    }                // loads the add onClick event with item values
     function getAssignedCourses(studentID) {
         $.get('lists', function (list) {
             $('.students-course-list').html(list);
@@ -651,156 +783,32 @@ $(document).ready(function() {
                     $('.lists-title').text("No courses found.");
                 } else {
                     courses = JSON.parse(data);
-                for( i=0 ; i<courses.length ; i++ ) {
-                    var item = '<div id="lists" class="wrapper">\n' +
-                        '    <h1 class="title"></h1>\n' +
-                        '    <div class="cols">\n' +
-                        '        <div class="col" ontouchstart="this.classList.toggle(\'hover\');">\n' +
-                        '            <div class="container-list">\n' +
-                        '                <div class="front" style="background-image: url(images/magic-book.jpg)">\n' +
-                        '                    <div class="inner">\n' +
-                        '                        <p class="item-list-title">'+ courses[i]['name'] +'</p>\n' +
-                        '                        <span class="item-list-front">'+ courses[i]['ID'] +'</span>\n' +
-                        '                    </div>\n' +
-                        '                </div>\n' +
-                        '                <div class="back">\n' +
-                        '                    <div class="inner">\n' +
-                        '                        <p class="item-list-rear">'+ courses[i]['description'] +'</p>\n' +
-                        '                    </div>\n' +
-                        '                </div>\n' +
-                        '            </div>\n' +
-                        '        </div>\n' +
-                        '    </div>\n' +
-                        '</div>';
-                    $('#list-body').append(item);
-                }}
+                    for( i=0 ; i<courses.length ; i++ ) {
+                        var item = '<div id="lists" class="wrapper">\n' +
+                            '    <h1 class="title"></h1>\n' +
+                            '    <div class="cols">\n' +
+                            '        <div class="col" ontouchstart="this.classList.toggle(\'hover\');">\n' +
+                            '            <div class="container-list">\n' +
+                            '                <div class="front" style="background-image: url(images/magic-book.jpg)">\n' +
+                            '                    <div class="inner">\n' +
+                            '                        <p class="item-list-title">'+ courses[i]['name'] +'</p>\n' +
+                            '                        <span class="item-list-front">'+ courses[i]['ID'] +'</span>\n' +
+                            '                    </div>\n' +
+                            '                </div>\n' +
+                            '                <div class="back">\n' +
+                            '                    <div class="inner">\n' +
+                            '                        <p class="item-list-rear">'+ courses[i]['description'] +'</p>\n' +
+                            '                    </div>\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '        </div>\n' +
+                            '    </div>\n' +
+                            '</div>';
+                        $('#list-body').append(item);
+                    }}
             })
         })
     } // loads courses by student ID
-    function updateItem(string) {
-        $('#update-'+string).on('click', function () {
-            $('#upload-msg').text("");
-            if(string === "courses") {
-                var name = $('#name').val();
-                var description = $('#description').val();
-                var image = $('#upload-result').attr('src');
-                var ID = $('#ID').val();
-                if (name.length === 0 || description.length === 0) {
-                    $('#upload-msg').text("Please fill all the fields");
-                    $('#upload-msg').css('color', 'red')
-                } else if (image.length === 0) {
-                    $('#upload-msg').text("Please upload your image");
-                    $('#upload-msg').css('color', 'yellow')
-                } else {
-                    var dataToInsert = {
-                        ID: ID,
-                        list: string,
-                        name: fLetterUpperCase(name),
-                        description: description,
-                        image: image
-                    };
-                    $.ajax({
-                        url: 'actions/update.php', //targets the insert data file
-                        data: dataToInsert,
-                        type: 'post',
-                        success: function (result) {
-                            endOfEdit(string);
-                        }
-                    })
-                }
-            } else if(string === "students") {
-                var ID = $('#ID').val();
-                var name = $('#name').val();
-                var phone = $('#phone').val();
-                var email = $('#email').val();
-                var image = $('#upload-result').attr('src');
-                var courses = [];
-                for( i=0 ; i<$('input:checked').length ; i++ ){
-                    courses.push($('input:checked')[i].id);
-                }
-
-                if (name.length === 0 || phone.length === 0) {
-                    $('#upload-msg').text("Please fill all the fields");
-                    $('#upload-msg').css('color', 'red')
-                } else if(!/^(?:\+?\d{2}[ -]?\d{3}[ -]?\d{5}|\d{4})$/.test(phone)) {
-                    $('#upload-msg').text("Phone is incorrect");
-                } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
-                    $('#upload-msg').text("E-mail is incorrect");
-                } else if (image.length === 0) {
-                    $('#upload-msg').text("Please upload your image");
-                    $('#upload-msg').css('color', 'yellow')
-                } else {
-                    var dataToInsert = {
-                        ID: ID,
-                        list: string,
-                        name: fLetterUpperCase(name),
-                        phone: phone,
-                        email: email,
-                        image: image,
-                        courses: (courses)
-                    };
-                    $.ajax({
-                        url: 'actions/update.php', //targets the insert data file
-                        data: dataToInsert,
-                        type: 'post',
-                        success: function (result) {
-                            endOfEdit(result);
-                        }
-                    })
-                }
-            } else if(string === "users") {
-                var ID = $('#ID').val();
-                var name = $('#name').val();
-                var phone = $('#phone').val();
-                var email = $('#email').val();
-                var image = $('#upload-result').attr('src');
-                var role = $('#role-input').val();
-
-                if (name.length === 0 || phone.length === 0) {
-                    $('#upload-msg').text("Please fill all the fields");
-                    $('#upload-msg').css('color', 'red')
-                } else if(!/^(?:\+?\d{2}[ -]?\d{3}[ -]?\d{5}|\d{4})$/.test(phone)) {
-                    $('#upload-msg').text("Phone is incorrect");
-                } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
-                    $('#upload-msg').text("E-mail is incorrect");
-                } else if (image.length === 0) {
-                    $('#upload-msg').text("Please upload your image");
-                    $('#upload-msg').css('color', 'yellow')
-                } else {
-                    var dataToInsert = {
-                        ID: ID,
-                        list: string,
-                        name: fLetterUpperCase(name),
-                        phone: phone,
-                        email: email,
-                        image: image,
-                        role: role
-                    };
-                    $.ajax({
-                        url: 'actions/update.php', //targets the insert data file
-                        data: dataToInsert,
-                        type: 'post',
-                        success: function (result) {
-                            if(result == "Only 1 Owner is allowed") {
-                                $('.form-container').html("Sorry, Only 1 owner is allowed.");
-                                console.log(result);
-                                setTimeout(function () {
-                                    reloadData();
-                                    loadCounters();
-                                    getUsers();
-                                },1500);
-                            } else {
-                                console.log(result);
-                                endOfEdit(result);
-                                getUsers();
-                            }
-                        }
-                    })
-                }
-            }
-        });
-
-    } //update item
     function getCheckboxs() {
         var allCourses = "";
         var assigned = "";
@@ -848,30 +856,16 @@ $(document).ready(function() {
         });
 
 
-    } // loads the checkboxs
+    }               // loads the checkboxs
+    function reloadData() {
+        getCourses();
+        getStudents();
+        addCourseClickInfo();
+        addStudentClickInfo();
+        $('.info-container').text('info');
+        $('#cancel').addClass('none');
 
-    function endOfEdit(string) {
-        var box = $('#info-box');
-        setTimeout(function () {
-            $('#info-box').addClass('flip');
-            box.html("<img src='images/success.png' width='60%'><div></div>");
-            // box.find('div').text(string);
-        },500);
-        setTimeout(function () {
-            reloadData();
-            loadCounters();
-            box.removeClass('flip');
-        },2000);
-    }
-    function flip(elemtnt) {
-        elemtnt.toggleClass('flip90');
-        setTimeout(function () {
-            elemtnt.toggleClass('flip90');
-        },300)
+    }                // reloads all data
 
-    }
-    function popUpEdit() {
-        $
 
-    }
 });

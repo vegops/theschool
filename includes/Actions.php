@@ -131,9 +131,12 @@ class Actions extends SchoolDb
         $sq = "SELECT * FROM `$table` WHERE `role` = 'owner'";
         $result = $this->connect()->query($sq);
         if($result->num_rows > 0 && $role == "Owner") {
-	        echo "Only 1 Owner is allowed";
-	        exit();
-        }
+            $user = $result->fetch_assoc();
+            if($user['ID'] !== $ID) {
+                echo "Only 1 Owner is allowed";
+                exit();
+            };
+        };
         $sql = "UPDATE $table SET `name`='$name', `phone`='$phone', `email`='$email', `image`='$image', `role`='$role' WHERE `$table`.`ID`='$ID';";
         $rows_affected = $this->connect()->query($sql);
         if (($rows_affected)) {
